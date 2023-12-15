@@ -1,7 +1,48 @@
-h2{
-    margin: 1rem;
-    padding: 3vh;
-    border: 2px solid black;
-    background-color: #333341;
-    color:wheat;
+h2 {
+  margin: 1rem;
+  padding: 3vh;
+  border-radius: 5px;
+  background-color: #333341;
+  color: wheat;
+}
+.card {
+  /* margin: 3vh 3vw; */
+  border-radius: 5px solid rgb(40, 38, 38);
+  border:2px #333341;
+  width: 50%;
+}
+.table-input,label{
+    margin : 1vh 1vw;
+}
+.column-input{
+  margin : 2vh 1vw;
+  width: 70%;
+}
+.card{
+  background-color: antiquewhite;
+  border:2px solid black;
+  padding: 2vh 2vw;
+  margin-left: 100px;
+}
+
+.p-label{
+  margin-top: 11px;
+}
+.input1{
+  display: flex;
+  flex-direction: column;
+  
+}
+.inputfield{
+  width:2.2rem
+}
+.p-key{
+  margin-right: 20px;
+}
+.btn-center{
+  margin-left:29%;
+  margin-top:2vh;
+}
+::ng-deep.p-element{
+  width:3.2rem !important;
 }
