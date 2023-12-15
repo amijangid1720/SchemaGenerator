@@ -1,1 +1,139 @@
 <h2>Schema Generator</h2>
+
+<div>
+  <div class="d-flex">
+    <label class="mb-2 block font-bold" for="minmax-buttons"
+      >Enter Table Name
+    </label>
+    <input
+      type="text"
+      [style]="{ width: '50%' }"
+      class="form-control table-input"
+      aria-label="Sizing example input"
+      placeholder="Enter Table Name"
+      aria-describedby="inputGroup-sizing-lg"
+      [(ngModel)]="tablename"
+    />
+  </div>
+
+  <div d-flex>
+    <label class="mb-2 mt-4 block font-bold" for="minmax-buttons"
+      >Number Of Columns
+    </label>
+    <p-inputNumber
+      [(ngModel)]="columns"
+      [style]="{ 'margin-left': '1rem', width: '2.2rem' }"
+      [showButtons]="true"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      inputId="horizontal"
+      [min]="0"
+      [max]="100"
+      decrementButtonClass="p-button-secondary"
+      incrementButtonClass="p-button-secondary"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+    ></p-inputNumber>
+  </div>
+
+  <div
+    *ngFor="let i of [].constructor(columns); let index = index"
+    class="mt-4"
+  >
+    <div class="card d-flex">
+      <div class="form-group d-flex align-items-center">
+        <input
+          type="text"
+          class="form-control column-input mr-2"
+          aria-label="Sizing example input"
+          placeholder="Enter Column Name"
+          aria-describedby="inputGroup-sizing-lg"
+          [(ngModel)]="inputValues[index]"
+        />
+        <div class="d-flex align-items-center mr-4 p-key">
+          <label for="flexCheckDefault" class="mr-2">Primary Key</label>
+          <input
+            class="p-label mr-2"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            [(ngModel)]="isPrimary"
+          />
+        </div>
+
+        <a
+          class="btn btn-secondary dropdown-toggle"
+          href="#"
+          role="button"
+          id="dropdownMenuLink"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          {{ selectedDataType }}
+        </a>
+
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <li>
+            <a
+              class="dropdown-item"
+              name="INT"
+              (click)="OnSelectedDataType($event)"
+              href="#"
+              >INT
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              name="VARCHAR"
+              (click)="OnSelectedDataType($event)"
+              href="#"
+              >VARCHAR()</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              name="DOUBLE"
+              (click)="OnSelectedDataType($event)"
+              href="#"
+              >DOUBLE</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              name="FLOAT"
+              (click)="OnSelectedDataType($event)"
+              href="#"
+              >FLOAT</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              name="CHAR"
+              (click)="OnSelectedDataType($event)"
+              href="#"
+              >CHAR</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              name="BOOLEAN"
+              (click)="OnSelectedDataType($event)"
+              href="#"
+              >BOOLEAN</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="btn-center">
+    <button type="button" *ngIf="columns" class="btn btn-dark">
+      Generate
+    </button>
+  </div>
+</div>
