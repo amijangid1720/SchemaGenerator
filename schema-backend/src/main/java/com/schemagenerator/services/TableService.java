@@ -25,7 +25,13 @@ public class TableService {
         StringBuilder sql = new StringBuilder("CREATE TABLE " + tableName + " (");
 
         for (Column column : columns) {
-            sql.append(column.getName()).append(" ").append(column.getDatatype()).append(", ");
+            sql.append(column.getName()).append(" ").append(column.getDatatype());
+
+            if (column.isPrimaryKey()) {
+                sql.append(" PRIMARY KEY");
+            }
+
+            sql.append(", ");
         }
 
         // Remove the trailing comma and space
@@ -43,4 +49,5 @@ public class TableService {
             throw new Exception("Error creating table", e);
         }
     }
+
 }

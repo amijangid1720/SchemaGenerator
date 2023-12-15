@@ -11,4 +11,5 @@ import lombok.*;
 public class Column {
     private String name;
     private String datatype;
+    private boolean primaryKey;
 }
