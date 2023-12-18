@@ -8,18 +8,24 @@ h2 {
 .card {
   /* margin: 3vh 3vw; */
   border-radius: 5px solid rgb(40, 38, 38);
-  width: 40vw;
-  background-color: antiquewhite;
-  border:2px solid black;
+  /* width: 72vw; */
+  width: 60%;
+   background-color: antiquewhite; 
+  /* border:2px solid black; */
+  outline: none;
+  border: none;
   padding: 2vh 2vw;
-  margin-left: 100px;
+  /* margin-left: 100px; */
+  margin-left: 10%;
+  margin-right: 10%;
 }
 .table-input,label{
     margin : 1vh 1vw;
 }
 .column-input{
   margin : 2vh 1vw;
-  width: 20rem;
+  /* width: 20rem;*/
+  width: 40%;
 }
 
 
@@ -38,9 +44,14 @@ h2 {
   margin-right: 20px;
 }
 .btn-center{
-  margin-left:29%;
+  margin-left:35%;
   margin-top:2vh;
 }
 ::ng-deep.p-element{
   width:3.2rem !important;
+}
+.dropdown-toggle{
+  width: 30%;
+  margin-left: 3%;
+  margin-right: 3%;
 }

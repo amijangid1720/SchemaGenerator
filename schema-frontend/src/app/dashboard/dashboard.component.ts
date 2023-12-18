@@ -4,6 +4,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { Column } from '../Models/Column';
 import { HttpClient } from '@angular/common/http';
 import { SchemaGeneratorService } from '../Services/schema-generator.service';
+import { ToastrService } from 'ngx-toastr';
+import { ToasterService } from '../Services/toaster.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +23,8 @@ export class DashboardComponent {
 
   constructor(
     private http: HttpClient,
-    private schemaGenerator: SchemaGeneratorService
+    private schemaGenerator: SchemaGeneratorService,
+    private toaster: ToasterService
   ) {}
   OnSelectedDataType(event: any, columnIndex: number, column: Column) {
     console.log(event);
@@ -60,34 +63,9 @@ export class DashboardComponent {
     });
   }
 
-  // generateTable() {
-  //   // Prepare the request payload
-
-  //   const requestPayload = {
-  //     tableName: this.tablename,
-  //     columns: this.inputValues.map(column => ({
-  //       name: column.name,
-  //       primary: column.primary,
-  //       dataType: column.dataType
-  //     }))
-  //   };
-
-  //    console.log("11111");
-  //    console.log(requestPayload);
-
-  //   // Make a POST request to your Spring Boot backend
-  //   this.http.post<any>('http://localhost:8082/schema/create-table', requestPayload)
-  //     .subscribe(response => {
-  //       console.log("222222");
-
-  //       console.log("response",response);
-
-  //     });
-  // }
 
   generateTable1() {
     // Prepare the request payload
-
     const requestPayload = {
       tableName: this.tablename,
       columns: this.inputValues.map((column) => ({
@@ -99,10 +77,17 @@ export class DashboardComponent {
     this.schemaGenerator.generateTable(requestPayload).subscribe({
       next: (response) => {
         console.log(response);
+      this.toaster.showSuccess;
       },
       error: (err) => {
+        // console.log("erroro");
+        
         console.log(err.message);
+        this.toaster.showfailure;
       },
     });
   }
+
+
 }
+
