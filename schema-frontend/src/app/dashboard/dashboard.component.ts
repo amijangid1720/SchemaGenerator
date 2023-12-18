@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus} from '@fortawesome/free-solid-svg-icons';
-import { HttpClient } from '@angular/common/http';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Column } from '../Models/Column';import { HttpClient } from '@angular/common/http';
 
 
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
   tablename:string='';
