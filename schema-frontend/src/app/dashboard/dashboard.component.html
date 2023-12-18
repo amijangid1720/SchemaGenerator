@@ -13,7 +13,14 @@
       placeholder="Enter Table Name"
       aria-describedby="inputGroup-sizing-lg"
       [(ngModel)]="tablename"
+      pattern="^[^\s]+$" 
+      #tablenameInput="ngModel" 
+      required
     />
+    <div *ngIf="tablenameInput.invalid && (tablenameInput.dirty || tablenameInput.touched)">
+      <small *ngIf="tablenameInput.errors?.['required']">Table Name is required.</small>
+      <small *ngIf="tablenameInput.errors?.['pattern']">Table Name should not contain spaces.</small>
+    </div>
   </div>
 
   <div d-flex>
@@ -47,7 +54,12 @@
           placeholder="Enter Column Name"
           aria-describedby="inputGroup-sizing-lg"
           [(ngModel)]="column.name"
+          name="columnName{{index}}"
+          pattern="^[^\s]+$" 
+          #columnNameInput="ngModel"
+          required
         />
+        
         <div class="d-flex align-items-center mr-4 p-key">
           <label for="flexCheckDefault" class="mr-2">Primary Key</label>
           <input
@@ -128,6 +140,10 @@
             >
           </li>
         </ul>
+      </div>
+      <div *ngIf="columnNameInput.invalid && (columnNameInput.dirty || columnNameInput.touched)">
+        <small *ngIf="columnNameInput.errors?.['required']">Column Name is required.</small>
+        <small *ngIf="columnNameInput.errors?.['pattern'] !== undefined">Column Name should not contain spaces.</small>
       </div>
     </div>
   </div>

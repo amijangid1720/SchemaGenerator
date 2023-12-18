@@ -3,3 +3,6 @@
 @import 'primeicons/primeicons.css';
 @import "~@fortawesome/fontawesome-free/css/all.css";
 @import '~primeng/resources/themes/bootstrap4-light-blue/theme.css';
+small{
+    color: red;
+}
