@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -20,14 +19,13 @@ public class TableService {
     public void createTable(CreateTableRequest request) throws Exception {
         String tableName = request.getTableName();
         List<Column> columns = request.getColumns();
-
+        System.out.println(columns);
         // Generate SQL statement for creating the table
         StringBuilder sql = new StringBuilder("CREATE TABLE " + tableName + " (");
-
         for (Column column : columns) {
-            sql.append(column.getName()).append(" ").append(column.getDatatype());
+            sql.append(column.getName()).append(" ").append(column.getDataType());
 
-            if (column.isPrimaryKey()) {
+            if (column.isPrimary()) {
                 sql.append(" PRIMARY KEY");
             }
 

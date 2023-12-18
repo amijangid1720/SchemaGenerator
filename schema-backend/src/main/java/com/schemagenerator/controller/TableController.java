@@ -18,6 +18,7 @@ public class TableController {
     @PostMapping("/create-table")
     public ResponseEntity<ApiResponse> createTable(@RequestBody CreateTableRequest request){
          try{
+             System.out.println(request);
              tableService.createTable(request);
              return  ResponseEntity.ok().body(new ApiResponse("Table created sucecssfully"));
          }catch(Exception e){

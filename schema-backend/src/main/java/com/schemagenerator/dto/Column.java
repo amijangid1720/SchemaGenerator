@@ -10,6 +10,6 @@ import lombok.*;
 @Builder
 public class Column {
     private String name;
-    private String datatype;
-    private boolean primaryKey;
+    private boolean isPrimary;
+    private String dataType;
 }

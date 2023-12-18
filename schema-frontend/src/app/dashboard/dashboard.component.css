@@ -8,22 +8,20 @@ h2 {
 .card {
   /* margin: 3vh 3vw; */
   border-radius: 5px solid rgb(40, 38, 38);
-  border:2px #333341;
-  width: 50%;
+  width: 40vw;
+  background-color: antiquewhite;
+  border:2px solid black;
+  padding: 2vh 2vw;
+  margin-left: 100px;
 }
 .table-input,label{
     margin : 1vh 1vw;
 }
 .column-input{
   margin : 2vh 1vw;
-  width: 70%;
+  width: 20rem;
 }
-.card{
-  background-color: antiquewhite;
-  border:2px solid black;
-  padding: 2vh 2vw;
-  margin-left: 100px;
-}
+
 
 .p-label{
   margin-top: 11px;

@@ -51,11 +51,13 @@
         <div class="d-flex align-items-center mr-4 p-key">
           <label for="flexCheckDefault" class="mr-2">Primary Key</label>
           <input
+            [disabled]="!primaryKeyVisibility"
             class="p-label mr-2"
             type="checkbox"
             value=""
             id="flexCheckDefault"
-            [(ngModel)]="column.isPrimary"
+            [(ngModel)]="column.primary"
+            (click)="checkVisibility(index)"
           />
         </div>
 
@@ -75,7 +77,7 @@
             <a
               class="dropdown-item"
               name="INT"
-              (click)="OnSelectedDataType($event,index,column)"
+              (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >INT
             </a>
@@ -83,8 +85,8 @@
           <li>
             <a
               class="dropdown-item"
-              name="VARCHAR"
-              (click)="OnSelectedDataType($event,index,column)"
+              name="VARCHAR(255)"
+              (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >VARCHAR()</a
             >
@@ -93,7 +95,7 @@
             <a
               class="dropdown-item"
               name="DOUBLE"
-              (click)="OnSelectedDataType($event,index,column)"
+              (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >DOUBLE</a
             >
@@ -102,7 +104,7 @@
             <a
               class="dropdown-item"
               name="FLOAT"
-              (click)="OnSelectedDataType($event,index,column)"
+              (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >FLOAT</a
             >
@@ -110,8 +112,8 @@
           <li>
             <a
               class="dropdown-item"
-              name="CHAR"
-              (click)="OnSelectedDataType($event,index,column)"
+              name="CHAR(255)"
+              (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >CHAR</a
             >
@@ -120,7 +122,7 @@
             <a
               class="dropdown-item"
               name="BOOLEAN"
-              (click)="OnSelectedDataType($event,index,column)"
+              (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >BOOLEAN</a
             >
@@ -130,7 +132,12 @@
     </div>
   </div>
   <div class="btn-center">
-    <button type="button" *ngIf="columns" class="btn btn-dark" (click)="generateTable()">
+    <button
+      type="button"
+      *ngIf="columns"
+      class="btn btn-dark"
+      (click)="generateTable1()"
+    >
       Generate
     </button>
   </div>

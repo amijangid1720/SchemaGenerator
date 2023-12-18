@@ -2,5 +2,5 @@ export class Column
 {
   name:string="";
   dataType:string="";
-  isPrimary:boolean=false;
+  primary:boolean=false;
 }
