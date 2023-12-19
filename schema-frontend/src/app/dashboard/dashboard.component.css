@@ -5,6 +5,9 @@ h2 {
   background-color: #333341;
   color: wheat;
 }
+.wrapper{
+  margin: 2%;
+}
 .card {
   /* margin: 3vh 3vw; */
   border-radius: 5px solid rgb(40, 38, 38);
@@ -17,20 +20,35 @@ h2 {
   padding: 2vh 2vw;
   /* margin-left: 100px; */
   margin-left: 10%;
-  margin-right: 10%;
+  /* margin-right: %; */
 }
 .table-input,label{
     margin : 1vh 1vw;
+    border: none;
+    outline: none;
+    
 }
 .column-input{
-  margin : 2vh 1vw;
+  /* margin : 2vh 1vw; */
+  margin-left: 2%;
+  margin-right: 2%;
   /* width: 20rem;*/
-  width: 40%;
+  width: 100%;
+  outline: none;
+margin-bottom: 2%;
+  
+  
 }
-
-
-.p-label{
-  margin-top: 11px;
+.remove-outline:focus {
+  outline: none;
+}
+.block{
+  font-size: 1.4em;
+}
+.p-input{
+  /* margin-top: 11px; */
+  /* height: 40px; */
+  
 }
 .input1{
   display: flex;
@@ -43,15 +61,69 @@ h2 {
 .p-key{
   margin-right: 20px;
 }
+.p-label{
+  font-size: 1.3em;
+}
 .btn-center{
   margin-left:35%;
   margin-top:2vh;
+  width: 20%;
 }
 ::ng-deep.p-element{
   width:3.2rem !important;
 }
 .dropdown-toggle{
-  width: 30%;
+  width: 100%;
   margin-left: 3%;
-  margin-right: 3%;
+  margin-right: 1%;
+  margin-bottom: 3%;
+}
+.valid{
+  padding-left: 2%;
+  /* padding-top: .5%; */
+  margin-top: .2%;
+}
+.drop{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 5%;
+  width: 40%;
+  padding-top: 1.5%;
+}
+
+.input-container{
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  margin-right: 2%;
+   margin-top: 1%;
+  /* margin-bottom: 2%; */
+  /* margin-top: 1.5%; */
+}
+
+.delete-button {
+  position: absolute;
+  background-color: white;
+  color: red;
+  border: none;
+  outline: none;
+  font-size: larger;
+  top: 10px;
+  right: 10px;
+}
+
+/* Style for the cross button */
+.close-button {
+  cursor: pointer;
+  position: absolute;
+  top: 1px;
+  right: 10px;
+  font-size: 40px;
+  color: red;
+}
+
+/* Add a hover effect for better visibility */
+.close-button:hover {
+  color: darkred;
 }

@@ -1,26 +1,35 @@
 <h2>Schema Generator</h2>
 
-<div>
-  <div class="d-flex">
-    <label class="mb-2 block font-bold" for="minmax-buttons"
-      >Enter Table Name
+<div class="wrapper">
+  <div class="d-flex mb-2">
+    <label class="block font-bold p-2" for="minmax-buttons"
+      >Table Name :
     </label>
     <input
       type="text"
       [style]="{ width: '50%' }"
-      class="form-control table-input"
+      class="form-control table-input shadow-none p-3 mb-1 bg-light rounded"
       aria-label="Sizing example input"
       placeholder="Enter Table Name"
       aria-describedby="inputGroup-sizing-lg"
       [(ngModel)]="tablename"
-      pattern="^[^\s]+$" 
-      #tablenameInput="ngModel" 
+      pattern="^[^\s]+$"
+      #tablenameInput="ngModel"
       required
     />
-    <div *ngIf="tablenameInput.invalid && (tablenameInput.dirty || tablenameInput.touched)">
-      <small *ngIf="tablenameInput.errors?.['required']">Table Name is required.</small>
-      <small *ngIf="tablenameInput.errors?.['pattern']">Table Name should not contain spaces.</small>
-    </div>
+  </div>
+  <div
+    class="valid"
+    *ngIf="
+      tablenameInput.invalid && (tablenameInput.dirty || tablenameInput.touched)
+    "
+  >
+    <small *ngIf="tablenameInput.errors?.['required']"
+      >Table Name is required.</small
+    >
+    <small *ngIf="tablenameInput.errors?.['pattern']"
+      >Table Name should not contain spaces.</small
+    >
   </div>
 
   <div d-flex>
@@ -44,51 +53,82 @@
     ></p-inputNumber>
   </div>
 
-  <div *ngFor="let column of inputValues; let index = index" class="mt-4 d-flex main" >
+  <div
+    *ngFor="let column of inputValues; let index = index"
+    class="mt-4 d-flex main"
+  >
     <div class="card d-flex shadow-lg p-3 mb-1 bg-white rounded">
       <div class="form-group d-flex align-items-center">
-        <input
+        <!-- Cross button for column deletion -->
+
+        <!-- <span class="close-button" (click)="deleteColumn(index)">&times;</span> -->
+    <button type="button" class="btn btn-danger delete-button" (click)="deleteColumn(index)">
+      <i class="fa fa-xmark"></i>
+    </button>
+          
+        
+        <div class="input-container">
+          <input
           type="text"
           class="form-control column-input mr-2"
-          aria-label="Sizing example input"
+          aria-label="Sizing example input remove-outline"
           placeholder="Enter Column Name"
           aria-describedby="inputGroup-sizing-lg"
           [(ngModel)]="column.name"
-          name="columnName{{index}}"
-          pattern="^[^\s]+$" 
+          name="columnName{{ index }}"
+          pattern="^[^\s]+$"
           #columnNameInput="ngModel"
           required
         />
-        
+        <div
+        class="valid"
+        *ngIf="
+          columnNameInput.invalid &&
+          (columnNameInput.dirty || columnNameInput.touched)
+        "
+      >
+        <small *ngIf="columnNameInput.errors?.['required']"
+          >Column Name is required.</small
+        >
+        <small *ngIf="columnNameInput.errors?.['pattern'] !== undefined"
+          >Column Name should not contain spaces.</small
+        >
+      </div>
+    </div>
         <div class="d-flex align-items-center mr-4 p-key">
-          <label for="flexCheckDefault" class="mr-2">Primary Key</label>
+          <label for="flexCheckDefault" class="mr-2 p-label">Primary Key</label>
           <input
             [disabled]="!primaryKeyVisibility"
-            class="p-label mr-2"
+            class="p-input mr-2"
             type="checkbox"
+            style="size: 100px"
             value=""
             id="flexCheckDefault"
             [(ngModel)]="column.primary"
             (click)="checkVisibility(index)"
           />
         </div>
-
+        
+        <div  class="drop">
         <a
           class="btn btn-secondary dropdown-toggle"
           href="#"
           role="button"
           id="dropdownMenuLink"
+          name="dataTypeInput"
           data-bs-toggle="dropdown"
           aria-expanded="false"
+         
         >
-          {{ column.dataType }}
+        {{ column.dataType || 'Select Data Type' }}
+      
         </a>
-
+       
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
           <li>
             <a
               class="dropdown-item"
-              name="INT"
+              name="integer"
               (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >INT
@@ -97,7 +137,7 @@
           <li>
             <a
               class="dropdown-item"
-              name="VARCHAR(255)"
+              name="varchar(255)"
               (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >VARCHAR()</a
@@ -106,19 +146,28 @@
           <li>
             <a
               class="dropdown-item"
-              name="DOUBLE"
+              name="text"
               (click)="OnSelectedDataType($event, index, column)"
               href="#"
-              >DOUBLE</a
+              >TEXT</a
             >
           </li>
           <li>
             <a
               class="dropdown-item"
-              name="FLOAT"
+              name="double precision"
               (click)="OnSelectedDataType($event, index, column)"
               href="#"
-              >FLOAT</a
+              >DOUBLE PRECISION</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              name="real"
+              (click)="OnSelectedDataType($event, index, column)"
+              href="#"
+              >REAL</a
             >
           </li>
           <li>
@@ -133,18 +182,35 @@
           <li>
             <a
               class="dropdown-item"
-              name="BOOLEAN"
+              name="boolean"
               (click)="OnSelectedDataType($event, index, column)"
               href="#"
               >BOOLEAN</a
             >
           </li>
         </ul>
+        <div class="valid">
+          <small
+            *ngIf="!column.dataType"
+            >Data Type is required.</small
+          >
+        </div>
       </div>
-      <div *ngIf="columnNameInput.invalid && (columnNameInput.dirty || columnNameInput.touched)">
-        <small *ngIf="columnNameInput.errors?.['required']">Column Name is required.</small>
-        <small *ngIf="columnNameInput.errors?.['pattern'] !== undefined">Column Name should not contain spaces.</small>
       </div>
+      <!-- <div
+        class="valid"
+        *ngIf="
+          columnNameInput.invalid &&
+          (columnNameInput.dirty || columnNameInput.touched)
+        "
+      >
+        <small *ngIf="columnNameInput.errors?.['required']"
+          >Column Name is required.</small
+        >
+        <small *ngIf="columnNameInput.errors?.['pattern'] !== undefined"
+          >Column Name should not contain spaces.</small
+        >
+      </div> -->
     </div>
   </div>
   <div class="btn-center">
@@ -152,9 +218,11 @@
       type="button"
       *ngIf="columns"
       class="btn btn-dark"
+      [disabled]="tablenameInput.invalid"
       (click)="generateTable1()"
     >
-      Generate
+      Generate Table
     </button>
   </div>
 </div>
+<ngx-ui-loader></ngx-ui-loader>
