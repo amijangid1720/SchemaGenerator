@@ -38,6 +38,7 @@
     </label>
     <p-inputNumber
       [(ngModel)]="columns"
+      
       [style]="{ 'margin-left': '1rem', width: '2.2rem' }"
       [showButtons]="true"
       buttonLayout="horizontal"
@@ -61,40 +62,48 @@
       <div class="form-group d-flex align-items-center">
         <!-- Cross button for column deletion -->
 
-        <!-- <span class="close-button" (click)="deleteColumn(index)">&times;</span> -->
-    <button type="button" class="btn btn-danger delete-button" (click)="deleteColumn(index)">
-      <i class="fa fa-xmark"></i>
-    </button>
-          
-        
+        <div class="delete-button" (click)="deleteColumn(index)"  >
+          <fa-icon
+            [icon]="faXmark"
+            (click)="reduceColumns()"
+            size="2x"
+            [styles]="{
+              stroke: 'red',
+              color: 'red',
+              'font-size': '17px'
+            }"
+           
+          ></fa-icon> 
+        </div>
+
         <div class="input-container">
           <input
-          type="text"
-          class="form-control column-input mr-2"
-          aria-label="Sizing example input remove-outline"
-          placeholder="Enter Column Name"
-          aria-describedby="inputGroup-sizing-lg"
-          [(ngModel)]="column.name"
-          name="columnName{{ index }}"
-          pattern="^[^\s]+$"
-          #columnNameInput="ngModel"
-          required
-        />
-        <div
-        class="valid"
-        *ngIf="
-          columnNameInput.invalid &&
-          (columnNameInput.dirty || columnNameInput.touched)
-        "
-      >
-        <small *ngIf="columnNameInput.errors?.['required']"
-          >Column Name is required.</small
-        >
-        <small *ngIf="columnNameInput.errors?.['pattern'] !== undefined"
-          >Column Name should not contain spaces.</small
-        >
-      </div>
-    </div>
+            type="text"
+            class="form-control column-input mr-2"
+            aria-label="Sizing example input remove-outline"
+            placeholder="Enter Column Name"
+            aria-describedby="inputGroup-sizing-lg"
+            [(ngModel)]="column.name"
+            name="columnName{{ index }}"
+            pattern="^[^\s]+$"
+            #columnNameInput="ngModel"
+            required
+          />
+          <div
+            class="valid"
+            *ngIf="
+              columnNameInput.invalid &&
+              (columnNameInput.dirty || columnNameInput.touched)
+            "
+          >
+            <small *ngIf="columnNameInput.errors?.['required']"
+              >Column Name is required.</small
+            >
+            <small *ngIf="columnNameInput.errors?.['pattern'] !== undefined"
+              >Column Name should not contain spaces.</small
+            >
+          </div>
+        </div>
         <div class="d-flex align-items-center mr-4 p-key">
           <label for="flexCheckDefault" class="mr-2 p-label">Primary Key</label>
           <input
@@ -108,109 +117,91 @@
             (click)="checkVisibility(index)"
           />
         </div>
-        
-        <div  class="drop">
-        <a
-          class="btn btn-secondary dropdown-toggle"
-          href="#"
-          role="button"
-          id="dropdownMenuLink"
-          name="dataTypeInput"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-         
-        >
-        {{ column.dataType || 'Select Data Type' }}
-      
-        </a>
-       
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <li>
-            <a
-              class="dropdown-item"
-              name="integer"
-              (click)="OnSelectedDataType($event, index, column)"
-              href="#"
-              >INT
-            </a>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              name="varchar(255)"
-              (click)="OnSelectedDataType($event, index, column)"
-              href="#"
-              >VARCHAR()</a
-            >
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              name="text"
-              (click)="OnSelectedDataType($event, index, column)"
-              href="#"
-              >TEXT</a
-            >
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              name="double precision"
-              (click)="OnSelectedDataType($event, index, column)"
-              href="#"
-              >DOUBLE PRECISION</a
-            >
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              name="real"
-              (click)="OnSelectedDataType($event, index, column)"
-              href="#"
-              >REAL</a
-            >
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              name="CHAR(255)"
-              (click)="OnSelectedDataType($event, index, column)"
-              href="#"
-              >CHAR</a
-            >
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              name="boolean"
-              (click)="OnSelectedDataType($event, index, column)"
-              href="#"
-              >BOOLEAN</a
-            >
-          </li>
-        </ul>
-        <div class="valid">
-          <small
-            *ngIf="!column.dataType"
-            >Data Type is required.</small
+
+        <div class="drop">
+          <a
+            class="btn btn-secondary dropdown-toggle"
+            href="#"
+            role="button"
+            id="dropdownMenuLink"
+            name="dataTypeInput"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
+            {{ column.dataType || "Select Data Type" }}
+          </a>
+
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li>
+              <a
+                class="dropdown-item"
+                name="integer"
+                (click)="OnSelectedDataType($event, index, column)"
+                href="#"
+                >INT
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                name="varchar(255)"
+                (click)="OnSelectedDataType($event, index, column)"
+                href="#"
+                >VARCHAR()</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                name="text"
+                (click)="OnSelectedDataType($event, index, column)"
+                href="#"
+                >TEXT</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                name="double precision"
+                (click)="OnSelectedDataType($event, index, column)"
+                href="#"
+                >DOUBLE PRECISION</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                name="real"
+                (click)="OnSelectedDataType($event, index, column)"
+                href="#"
+                >REAL</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                name="CHAR(255)"
+                (click)="OnSelectedDataType($event, index, column)"
+                href="#"
+                >CHAR</a
+              >
+            </li>
+            <li>
+              <a
+                class="dropdown-item"
+                name="boolean"
+                (click)="OnSelectedDataType($event, index, column)"
+                href="#"
+                >BOOLEAN</a
+              >
+            </li>
+          </ul>
+          <div class="valid">
+            <small *ngIf="!column.dataType">Data Type is required.</small>
+          </div>
         </div>
       </div>
-      </div>
-      <!-- <div
-        class="valid"
-        *ngIf="
-          columnNameInput.invalid &&
-          (columnNameInput.dirty || columnNameInput.touched)
-        "
-      >
-        <small *ngIf="columnNameInput.errors?.['required']"
-          >Column Name is required.</small
-        >
-        <small *ngIf="columnNameInput.errors?.['pattern'] !== undefined"
-          >Column Name should not contain spaces.</small
-        >
-      </div> -->
+    
     </div>
   </div>
   <div class="btn-center">

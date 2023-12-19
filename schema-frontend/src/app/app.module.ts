@@ -11,6 +11,8 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
+import { TooltipModule } from 'primeng/tooltip';
+
 
 
 
@@ -31,7 +33,8 @@ import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgxUiLoaderModule,
-    NgxUiLoaderHttpModule.forRoot({ showForeground: true})
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true}),
+    TooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

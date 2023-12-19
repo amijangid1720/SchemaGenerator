@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { Column } from '../Models/Column';
 import { HttpClient } from '@angular/common/http';
 import { SchemaGeneratorService } from '../Services/schema-generator.service';
@@ -14,6 +14,7 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
+  faXmark=faXmark;
   tablename: string = '';
   columns: number = 0;
   inputValues: Column[] = []; // Use an array to store values for each input
@@ -35,7 +36,10 @@ export class DashboardComponent {
     console.log(column);
     column.dataType = event.target.name;
   }
-
+  reduceColumns(){
+    this.columns=this.columns-1;
+    
+  }
   onColumnsChange(val: any) {
     const currentColumnCount = this.inputValues.length;
     // If the number of columns has increased, add new columns
