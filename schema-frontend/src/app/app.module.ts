@@ -10,6 +10,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
+
 
 
 
@@ -27,7 +29,9 @@ import { ToastrModule } from 'ngx-toastr';
     FontAwesomeModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgxUiLoaderModule,
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true})
   ],
   providers: [],
   bootstrap: [AppComponent]
