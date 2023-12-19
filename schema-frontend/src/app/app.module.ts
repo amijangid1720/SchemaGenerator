@@ -11,6 +11,10 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
+import { TooltipModule } from 'primeng/tooltip';
+import { CreateTableComponent } from './create-table/create-table.component';
+import { SideMenuComponent } from './dashboard/side-menu/side-menu.component';
+
 
 
 
@@ -18,7 +22,9 @@ import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    CreateTableComponent,
+    SideMenuComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +37,8 @@ import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgxUiLoaderModule,
-    NgxUiLoaderHttpModule.forRoot({ showForeground: true})
+    NgxUiLoaderHttpModule.forRoot({ showForeground: true}),
+    TooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
