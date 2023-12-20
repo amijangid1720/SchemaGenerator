@@ -40,15 +40,22 @@ public class TableController {
         return tableService.getTableSchema(tableName);
     }
 
+//    @GetMapping("/tables")
+//    public ResponseEntity<List<String>> getAllTableNames() {
+//
+//        return ResponseEntity.status(200).body(tableService.getAllTableNames());
+//    }
+
+//    @GetMapping("/tables")
+//    public ResponseEntity<List<String>> getAllTableNames() {
+//
+//        return ResponseEntity.status(200).body(tableService.getAllTableNames());
+//    }
+
+
     @GetMapping("/tables")
     public ResponseEntity<List<String>> getAllTableNames() {
-
-        return ResponseEntity.status(200).body(tableService.getAllTableNames());
-    }
-
-    @GetMapping("/tables")
-    public ResponseEntity<List<String>> getAllTableNames() {
-
-        return ResponseEntity.status(200).body(tableService.getAllTableNames());
+        List<String> tableNames = tableService.getAllTableNames();
+        return ResponseEntity.ok().body(tableNames);
     }
 }

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { SchemaGeneratorService } from '../Services/schema-generator.service';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-table-description',
@@ -15,23 +17,26 @@ export class TableDescriptionComponent {
 
   constructor(
     private schemaGenerator: SchemaGeneratorService,
+    private route:ActivatedRoute
   ){}
  
-  getDescription(){
-    this.schemaGenerator.fetchSchema(this.tablename).subscribe({
-      next:(response:any) =>{
-        console.log(response);
-        this.column = response.columns;
-        console.log("data", this.column);
-        
-        
-      },
-      error:(err)=>{
-         console.log(err);
-         
-      }
+  ngOnInit(){
+    this.route.paramMap.pipe(switchMap(params =>  {
+       const tableName =params.get('tableName'); 
+       return this.schemaGenerator.fetchSchema(tableName);     
+    }))
+    .subscribe({next:(response:any) =>{
+      console.log(response);
+      this.column=response.columns;
+      console.log("data", this.column);
+    },
+    error:(err)=>{
+      console.log(err);
+      
+    }
+
     })
   }
-  
+
 }
 

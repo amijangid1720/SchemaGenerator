@@ -1,14 +1,15 @@
 <h2>Schema Generator</h2>
-  
-  <div class="section">
-    <div class="sidemenu">
-      <app-side-menu></app-side-menu>
-    </div>
-    <div class="main">
-      <!-- <app-table></app-table> -->
-      <app-table-description></app-table-description>
-<app-create-table></app-create-table>
-    </div>
+
+<div class="section">
+  <div class="sidemenu">
+    <app-side-menu></app-side-menu>
   </div>
+  <div class="main">
+    <router-outlet></router-outlet>
+    <!-- <app-table></app-table> -->
+    <!-- <app-table-description></app-table-description> -->
+    <!-- <app-create-table></app-create-table> -->
+  </div>
+</div>
 
 <ngx-ui-loader></ngx-ui-loader>

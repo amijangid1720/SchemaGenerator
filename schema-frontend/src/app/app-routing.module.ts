@@ -1,7 +1,33 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { CreateTableComponent } from './dashboard/create-table/create-table.component';
+import { TableComponent } from './table/table.component';
+import { TableDescriptionComponent } from './table-description/table-description.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path:'',
+  component:DashboardComponent,
+  children:[
+    {
+      path:'createtable',
+      component:CreateTableComponent,
+    },
+    {
+      path: 'table/:tableName', // Add a dynamic parameter :tableName
+      component: TableComponent,
+    },
+    {
+      path:'tabledesc/:tableName',
+      component:TableDescriptionComponent,
+    }
+
+   
+  ]
+  },
+
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -23,8 +23,7 @@ public class TableService {
     @Autowired
     private TableRepository tableRepository;
 
-    @Autowired
-    private TableRepository tableRepository;
+
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -108,5 +107,16 @@ public class TableService {
         // Assuming that your Table entity has a "tableName" property
         return tables.stream().map(Tables::getTableName).toList();
     }
+
+//    public List<String> getAllTableNames() {
+//        // Use native query to fetch all table names in the database
+//        String query = "SELECT table_name FROM information_schema.tables WHERE table_schema = current_database()";
+//
+//        List<String> tableNames = jdbcTemplate.queryForList(query, String.class);
+//
+//        System.out.println("All Tables in Database: " + tableNames);
+//
+//        return tableNames;
+//    }
 
 }

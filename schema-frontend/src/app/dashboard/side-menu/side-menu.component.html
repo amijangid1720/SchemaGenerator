@@ -1,8 +1,20 @@
 <div class="card d-flex shadow-lg p-3 mb-1 bg-white rounded">
-    <h4> <fa-icon [icon]="faPlus" [styles]="{margin:'2px',color:'#ff0a0a'}"></fa-icon> Create New Table </h4>
-    <ul>
-      <li *ngFor="let tableName of tableNames">
-        <fa-icon [icon]="faTable" [styles]="{margin:'2px'}"></fa-icon> <span>{{ tableName }}</span>  <fa-icon [icon]="faWrench" [styles]="{margin:'2px'}"></fa-icon></li>
-        
-    </ul>
-  </div>
+  <a href="" routerLink="createtable">
+    <h4>
+      <fa-icon [icon]="faPlus" [styles]="{ margin: '2px', color: '#ff0a0a' }"></fa-icon>
+      Create New Table
+    </h4>
+  </a>
+  <ul>
+
+    <li *ngFor="let tableName of tableNames">
+      <span>{{ tableName }}</span>
+      <a [routerLink]="['table', tableName]">
+        <fa-icon [icon]="faTable" [styles]="{ margin: '2px' }"></fa-icon>
+      </a>
+      <a [routerLink]="['tabledesc',tableName]">
+        <fa-icon [icon]="faWrench" [styles]="{ margin: '2px' }"></fa-icon>
+      </a>
+    </li>
+  </ul>
+</div>
