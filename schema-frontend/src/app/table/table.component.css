@@ -1,0 +1,32 @@
+/* Custom CSS for responsive table */
+.table-responsive {
+  overflow-x: auto;
+}
+
+.wrapper{
+    margin-top: 5%;
+    margin-right: 16%;
+    margin-left: 11%;
+    background-color: rgba(240, 248, 255, 0.582);
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+     /* box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 20px 0 rgba(0, 0, 0, 0.19); */
+    box-shadow:  0 3px 7px 0 rgb(216 204 204), 0 6px 24px 0 rgb(255 253 253 / 48%)
+    };
+
+
+table{
+    table-layout: fixed;
+}
+th{
+    height: 6vh;
+    align-items: center;
+    padding: 1%;
+    font-size: 1em;
+    border-bottom: .2vw solid black;
+    background-color: #B6BBC4;
+}
+td{
+    height: 3vh;
+    text-align: center;
+    padding: 1%;
+}

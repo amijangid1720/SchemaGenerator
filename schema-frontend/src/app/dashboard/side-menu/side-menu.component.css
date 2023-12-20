@@ -1,8 +1,38 @@
+/* .wrapper{
+  border: none;
+  outline: none;
+  border-bottom: 0;
+  box-shadow: 10px 10px 5px rgb(227, 228, 230);
+} */
+
+.wrapper {
+  background-color: wheat;
+  /* border-radius: 5px; */
+  color: #333341;
+  width: 100%;
+  height: 100%;
+  margin-right: 30px;
+  border: none;
+  position: relative; /* Add position: relative for the shadow pseudo-element */
+}
+
+.wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 20px; /* Adjust the width of the shadow as needed */
+  box-shadow: 5px 0 5px rgba(0, 0, 0, 0.1); /* Adjust the shadow properties as needed */
+}
+
 div {
   background-color: wheat;
   border-radius: 5px;
   color: #333341;
-  width: 300px;
+  /* width: 300px; */
+  /* min-width: 30vw; */
+  width: 100%;
   height: 100%;
   margin-right: 30px;
 }

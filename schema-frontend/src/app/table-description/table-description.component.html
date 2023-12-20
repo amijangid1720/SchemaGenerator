@@ -1,7 +1,8 @@
+<div class="table-responsive{-sm|-md|-lg|-xl|-xxl} wrapper text-center">
 <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
         <th scope="col" >Column Names</th>
         <th scope="col">Data Types</th>
         <th scope="col">PK</th>
@@ -10,7 +11,7 @@
     <tbody>
       <tr *ngFor="let column of column; let i = index">
         <td scope="row">{{ i + 1 }}</td>
-        <td>{{ column.name }}</td>
+        <td >{{ column.name }}</td>
         <td>{{ column.dataType }}</td>
         <td>
             <div class="form-check form-check-inline">
@@ -27,3 +28,4 @@
       </tr>
     </tbody>
   </table>
+  </div>
