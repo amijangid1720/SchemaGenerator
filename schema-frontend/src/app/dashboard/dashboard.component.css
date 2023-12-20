@@ -3,20 +3,18 @@ h2 {
   padding: 3vh;
   /* border-radius: 5px; */
   background-color: #333341;
+  margin-bottom: 0;
   color: wheat;
 }
-.section{
-  width:60vww;
-height: 60vh;
-/* background-color: red; */
-display: flex;
-flex-direction: row;
-
-}
-.sidemenu{
-  width: 15%;
+.section {
+  width: 60vww;
   height: 100%;
-  background-color: blue;
+  display: flex;
+  flex-direction: row;
+}
+.sidemenu {
+  width: 20%;
+  height: 100%;
 }
 .main{
   width: 85%;

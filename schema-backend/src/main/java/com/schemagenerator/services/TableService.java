@@ -5,6 +5,8 @@ import com.schemagenerator.dto.CreateTableRequest;
 import com.schemagenerator.dto.TableSchemaResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import com.schemagenerator.entity.Tables;
+import com.schemagenerator.dao.TableRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +19,12 @@ public class TableService {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private TableRepository tableRepository;
+
+    @Autowired
+    private TableRepository tableRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -47,6 +55,9 @@ public class TableService {
 
         try {
             jdbcTemplate.execute(sql.toString());
+            Tables tableEntity = new Tables();
+            tableEntity.setTableName(tableName);
+            tableRepository.save(tableEntity);
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error creating table", e);
@@ -91,5 +102,11 @@ public class TableService {
 
     }
 
+
+    public List<String> getAllTableNames() {
+        List<Tables> tables = tableRepository.findAll();
+        // Assuming that your Table entity has a "tableName" property
+        return tables.stream().map(Tables::getTableName).toList();
+    }
 
 }

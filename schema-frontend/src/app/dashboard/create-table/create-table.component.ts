@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { SchemaGeneratorService } from '../Services/schema-generator.service';
+import { SchemaGeneratorService } from '../../Services/schema-generator.service';
 import { HttpClient } from '@angular/common/http';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
-import { ToasterService } from '../Services/toaster.service';
-import { Column } from '../Models/Column';
+import { ToasterService } from '../../Services/toaster.service';
+import { Column } from '../../Models/Column';
+import { TableService } from '../../Services/tablenames.service';
 
 @Component({
   selector: 'app-create-table',
@@ -25,7 +26,8 @@ export class CreateTableComponent {
     private http: HttpClient,
     private schemaGenerator: SchemaGeneratorService,
     private toaster: ToasterService,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef ,
+    private tableService:TableService
   ) {}
   OnSelectedDataType(event: any, columnIndex: number, column: Column) {
     console.log(event);
@@ -82,10 +84,12 @@ export class CreateTableComponent {
     this.schemaGenerator.generateTable(requestPayload).subscribe({
       next: (response) => {
         console.log(response);
+        this.tableService.getTableNames();
+        
       this.toaster.showSuccess();
       },
       error: (err) => {
-         console.log("erroro");
+         console.log("error");
         
         console.log(err.message);
         this.toaster.showfailure();
