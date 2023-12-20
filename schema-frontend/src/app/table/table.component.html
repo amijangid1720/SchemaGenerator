@@ -1,0 +1,17 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col" (click)="fetchSchema()">#</th>
+        <!-- Loop through column names and generate th elements -->
+        <th *ngFor="let cname of cnames" scope="col">{{ cname }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>  </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+    </tbody>
+  </table>

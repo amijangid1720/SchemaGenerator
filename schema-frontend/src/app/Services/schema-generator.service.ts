@@ -16,5 +16,8 @@ export class SchemaGeneratorService {
    return this.http.post<any>(`${environment.backendUrl}schema/create-table`, requestPayload)
 
   }
+  fetchSchema(tablename:any):Observable<any>{
+    return this.http.get<any>(`${environment.backendUrl}schema/getSchema/${tablename}`);
+  }
 
 }

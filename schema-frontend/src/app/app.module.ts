@@ -14,6 +14,8 @@ import { NgxUiLoaderModule, NgxUiLoaderHttpModule } from "ngx-ui-loader";
 import { TooltipModule } from 'primeng/tooltip';
 import { CreateTableComponent } from './create-table/create-table.component';
 import { SideMenuComponent } from './dashboard/side-menu/side-menu.component';
+import { TableComponent } from './table/table.component';
+import { TableDescriptionComponent } from './table-description/table-description.component';
 
 
 
@@ -24,7 +26,9 @@ import { SideMenuComponent } from './dashboard/side-menu/side-menu.component';
     AppComponent,
     DashboardComponent,
     CreateTableComponent,
-    SideMenuComponent
+    SideMenuComponent,
+    TableComponent,
+    TableDescriptionComponent
   ],
   imports: [
     BrowserModule,

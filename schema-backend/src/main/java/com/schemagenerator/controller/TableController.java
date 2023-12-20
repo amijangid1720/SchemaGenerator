@@ -2,11 +2,15 @@ package com.schemagenerator.controller;
 
 
 import com.schemagenerator.dto.ApiResponse;
+import com.schemagenerator.dto.Column;
 import com.schemagenerator.dto.CreateTableRequest;
+import com.schemagenerator.dto.TableSchemaResponse;
 import com.schemagenerator.services.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins ="http://localhost:4200")
@@ -25,6 +29,11 @@ public class TableController {
 //             return ResponseEntity.ok().body("table not created");
              return ResponseEntity.status(500).body(new ApiResponse("Failed to create table"));
          }
+    }
 
+
+    @GetMapping("/getSchema/{tableName}")
+    public TableSchemaResponse getTableSchema(@PathVariable String tableName) {
+        return tableService.getTableSchema(tableName);
     }
 }

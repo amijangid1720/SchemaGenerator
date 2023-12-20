@@ -1,0 +1,29 @@
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col" (click)="getDescription()">Column Names</th>
+        <th scope="col">Data Types</th>
+        <th scope="col">PK</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let column of column; let i = index">
+        <td scope="row">{{ i + 1 }}</td>
+        <td>{{ column.name }}</td>
+        <td>{{ column.dataType }}</td>
+        <td>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="primaryKey{{ i }}"
+                [checked]="column.primary"
+                disabled
+              />
+              
+            </div>
+          </td>
+      </tr>
+    </tbody>
+  </table>
