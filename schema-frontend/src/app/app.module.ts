@@ -17,7 +17,7 @@ import { SideMenuComponent } from './dashboard/side-menu/side-menu.component';
 import { TableComponent } from './table/table.component';
 import { TableDescriptionComponent } from './table-description/table-description.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 
 @NgModule({
@@ -37,6 +37,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     InputNumberModule,
     FontAwesomeModule,
     HttpClientModule,
+    
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgxUiLoaderModule,
@@ -44,7 +45,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     TooltipModule,
     ConfirmDialogModule,
   ],
-  providers: [],
+  providers: [ MessageService,ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
