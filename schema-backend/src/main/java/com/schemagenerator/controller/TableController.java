@@ -48,13 +48,13 @@ public class TableController {
     }
 
     @DeleteMapping("/deleteTable/{tableName}")
-    public ResponseEntity<String> deleteTable(@PathVariable String tableName) {
+    public ResponseEntity<ApiResponse> deleteTable(@PathVariable String tableName) {
        try {
 
            return tableService.deleteTable(tableName);
        }catch (Exception e)
        {
-           return ResponseEntity.status(500).body("Error deleting table: " + e.getMessage());
+           return ResponseEntity.status(500).body(new ApiResponse("Error deleting table: " + e.getMessage()));
        }
 
     }

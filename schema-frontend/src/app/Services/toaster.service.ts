@@ -17,4 +17,5 @@ export class ToasterService {
   showfailure(){
     this.toastr.error('Failed to create table!','Failed!');
   }
+  
 }

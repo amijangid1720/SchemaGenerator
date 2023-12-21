@@ -1,5 +1,6 @@
 package com.schemagenerator.services;
 
+import com.schemagenerator.dto.ApiResponse;
 import com.schemagenerator.dto.Column;
 import com.schemagenerator.dto.CreateTableRequest;
 import com.schemagenerator.dto.TableSchemaResponse;
@@ -109,7 +110,7 @@ public class TableService {
         return tables.stream().map(Tables::getTableName).toList();
     }
 
-    public ResponseEntity<String> deleteTable(String tableName) {
+    public ResponseEntity<ApiResponse> deleteTable(String tableName) {
         Tables table=tableRepository.findByTableName(tableName).get();
         // Formulate the SQL query to drop the table
         String sql = "DROP TABLE " + tableName;
@@ -118,7 +119,7 @@ public class TableService {
         jdbcTemplate.execute(sql);
         tableRepository.delete(table);
         // If the execution reaches here, the table was deleted successfully
-        return ResponseEntity.status(200).body("Table deleted successfully");
+        return ResponseEntity.status(200).body(new ApiResponse("Table deleted successfully"));
     }
 
 }
