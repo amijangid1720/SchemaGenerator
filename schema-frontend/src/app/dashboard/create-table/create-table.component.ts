@@ -4,7 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { faPlus, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { ToasterService } from '../../Services/toaster.service';
 import { Column } from '../../Models/Column';
-import { TableService } from '../../Services/tablenames.service';
+import { TableService } from 'src/app/Services/table.service';
+
 
 @Component({
   selector: 'app-create-table',

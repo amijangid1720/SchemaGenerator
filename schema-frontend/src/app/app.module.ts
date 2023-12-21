@@ -16,8 +16,7 @@ import { CreateTableComponent } from './dashboard/create-table/create-table.comp
 import { SideMenuComponent } from './dashboard/side-menu/side-menu.component';
 import { TableComponent } from './table/table.component';
 import { TableDescriptionComponent } from './table-description/table-description.component';
-
-
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 
 
@@ -43,6 +42,7 @@ import { TableDescriptionComponent } from './table-description/table-description
     NgxUiLoaderModule,
     NgxUiLoaderHttpModule.forRoot({ showForeground: true}),
     TooltipModule,
+    ConfirmDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
