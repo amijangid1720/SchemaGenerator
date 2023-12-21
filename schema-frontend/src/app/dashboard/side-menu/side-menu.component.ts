@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TableService } from 'src/app/Services/tablenames.service';
-import { faTable,faCirclePlus,faWrench } from '@fortawesome/free-solid-svg-icons';
+import { faTable,faCirclePlus,faWrench, faPlus, faGreaterThan, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-side-menu',
   templateUrl: './side-menu.component.html',
@@ -9,8 +9,10 @@ import { faTable,faCirclePlus,faWrench } from '@fortawesome/free-solid-svg-icons
 export class SideMenuComponent implements OnInit {
   tableNames: string[] = [];
   faTable=faTable;
-  faPlus=faCirclePlus;
+  faPlus=faPlus;
   faWrench=faWrench;
+  faGreaterThan=faGreaterThan;
+  faTrashCan=faTrashCan;
 
 
   constructor(private tableService: TableService) {}
