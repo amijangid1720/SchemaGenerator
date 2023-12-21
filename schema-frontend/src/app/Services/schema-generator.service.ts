@@ -17,6 +17,7 @@ export class SchemaGeneratorService {
 
   }
   fetchSchema(tablename:any):Observable<any>{
+    tablename=tablename.toLowerCase()
     return this.http.get<any>(`${environment.backendUrl}schema/getSchema/${tablename}`);
   }
 
