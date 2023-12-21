@@ -9,6 +9,7 @@ import com.schemagenerator.entity.Tables;
 import com.schemagenerator.dao.TableRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -108,15 +109,16 @@ public class TableService {
         return tables.stream().map(Tables::getTableName).toList();
     }
 
-//    public List<String> getAllTableNames() {
-//        // Use native query to fetch all table names in the database
-//        String query = "SELECT table_name FROM information_schema.tables WHERE table_schema = current_database()";
-//
-//        List<String> tableNames = jdbcTemplate.queryForList(query, String.class);
-//
-//        System.out.println("All Tables in Database: " + tableNames);
-//
-//        return tableNames;
-//    }
+    public ResponseEntity<String> deleteTable(String tableName) {
+        Tables table=tableRepository.findByTableName(tableName).get();
+        // Formulate the SQL query to drop the table
+        String sql = "DROP TABLE " + tableName;
+
+        // Execute the query
+        jdbcTemplate.execute(sql);
+        tableRepository.delete(table);
+        // If the execution reaches here, the table was deleted successfully
+        return ResponseEntity.status(200).body("Table deleted successfully");
+    }
 
 }
