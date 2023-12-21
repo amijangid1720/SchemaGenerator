@@ -9,10 +9,15 @@
     </thead>
     <tbody>
       <tr *ngFor="let row of columnData; let i = index">
-        <td scope="row">{{ i + 1 }}</td>
+        <td scope="row"> </td>
         <!-- Loop through columns and generate td elements -->
         <td *ngFor="let cname of cnames">{{ row[cname] }}</td>
+        <!-- <td *ngFor="let cname of cnames" contenteditable="true" [(ngModel)]="row[cname]" (input)="onCellInput($event, i, cname)">
+          {{ row[cname] }}
+        </td> -->
       </tr>
     </tbody>
   </table>
+
+  <!-- <button class="btn btn-primary" (click)="applyChanges()">Apply Changes</button> -->
 </div>

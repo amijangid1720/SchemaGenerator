@@ -20,6 +20,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,11 +34,10 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     BrowserModule,
     AppRoutingModule,
     InputTextModule,
-    FormsModule,
     InputNumberModule,
     FontAwesomeModule,
     HttpClientModule,
-    
+    FormsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     NgxUiLoaderModule,
