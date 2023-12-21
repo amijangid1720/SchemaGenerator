@@ -26,7 +26,7 @@ export class TableService {
     );
   }
 
-  deleteTable(table:any):Observable<any>{
-    return this.http.delete<any>(`${environment.backendUrl}schema/deleteTable/${table}`);
+  deleteTable(tableName:any):Observable<any>{
+    return this.http.delete<any>(`${environment.backendUrl}schema/deleteTable/${tableName}`);
   }
 }

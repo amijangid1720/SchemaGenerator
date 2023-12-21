@@ -9,21 +9,22 @@
     </a>
     <ul>
 
-      <li *ngFor="let tableName of tableNames">
-        <fa-icon [icon]="faGreaterThan" [styles]="{ color: '#B6BBC4;'  ,'font-size': '15px' ,'padding-right':'9px'}"></fa-icon>
-        <span>{{ tableName }}</span>
-        <a [routerLink]="['table', tableName]">
-          <fa-icon [icon]="faTable" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'20px'}"></fa-icon>
-        </a>
-        <a [routerLink]="['tabledesc',tableName]">
-          <fa-icon [icon]="faWrench" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'5px'}"></fa-icon>
-        </a>
-        <a  (click)="deleteTable(tableName)">
-          <fa-icon [icon]="faTrashCan" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'5px'}"></fa-icon>
-        </a>
-      </li>
-    </ul>
-  </div>
+    <li *ngFor="let tableName of tableNames">
+      <fa-icon [icon]="faGreaterThan" [styles]="{ color: '#B6BBC4;'  ,'font-size': '15px' ,'padding-right':'9px'}"></fa-icon>
+      <span>{{ tableName }}</span>
+      <a [routerLink]="['table', tableName]">
+        <fa-icon [icon]="faTable" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'20px'}"></fa-icon>
+      </a>
+      <a [routerLink]="['tabledesc',tableName]">
+        <fa-icon [icon]="faWrench" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'5px'}"></fa-icon>
+      </a>
+      <a  (click)="deleteTable(tableName)">
+        <fa-icon [icon]="faTrashCan" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'5px'}"
+        ></fa-icon>
+      </a>
+    </li>
+  </ul>
+</div>
 
   <!-- for confirmation dialog -->
   <p-confirmDialog #cd [style]="{ width: '30vw' }">
