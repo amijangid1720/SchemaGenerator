@@ -1,23 +1,42 @@
-<div class="table-responsive{-sm|-md|-lg|-xl|-xxl} wrapper text-center">
+<!-- <div class="table-responsive{-sm|-md|-lg|-xl|-xxl} wrapper text-center">
   <table class="table ">
     <thead class="table-light">
       <tr>
         <th scope="col">#</th>
+         Loop through column names and generate th elements -->
+        <!-- <th *ngFor="let cname of cnames" scope="col">{{ cname }}</th>
+      </tr>
+    </thead>
+    <tbody> -->
+      <!-- <tr *ngFor="let row of columnData; let i = index">
+        <td scope="row">{{ i + 1 }}</td>
+        Loop through columns and generate td elements -->
+        <!-- <td *ngFor="let cname of cnames">{{ row[cname] }}</td> -->
+        <!-- <td *ngFor="let columnName of columnNames">{{ row[columnName] }}</td>
+      </tr>
+       
+      
+    </tbody>
+  </table> -->
+
+  <!-- <button class="btn btn-primary" (click)="applyChanges()">Apply Changes</button> -->
+<!-- </div>  -->
+
+<div class="table-responsive wrapper text-center">
+  <table class="table">
+    <thead class="table-light">
+      <tr>
+        <th scope="col">#</th>
         <!-- Loop through column names and generate th elements -->
-        <th *ngFor="let cname of cnames" scope="col">{{ cname }}</th>
+        <th *ngFor="let columnName of columnNames" scope="col">{{ columnName }}</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let row of columnData; let i = index">
-        <td scope="row"> </td>
+        <td scope="row">{{ i + 1 }}</td>
         <!-- Loop through columns and generate td elements -->
-        <td *ngFor="let cname of cnames">{{ row[cname] }}</td>
-        <!-- <td *ngFor="let cname of cnames" contenteditable="true" [(ngModel)]="row[cname]" (input)="onCellInput($event, i, cname)">
-          {{ row[cname] }}
-        </td> -->
+        <td *ngFor="let columnName of columnNames">{{ row[columnName] }}</td>
       </tr>
     </tbody>
   </table>
-
-  <!-- <button class="btn btn-primary" (click)="applyChanges()">Apply Changes</button> -->
 </div>

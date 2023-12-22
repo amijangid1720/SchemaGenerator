@@ -14,13 +14,8 @@ export class TableDescriptionComponent {
   column:any[]=[];
   primaryKeyVisibility: boolean = true;
   selectedPrimaryIndex: number | null = null;
-
-  // columns = [
-  //   { name: 'column.name', dataType: 'Type1', primary: false, editing: false },
-  //   // { name: 'column.name', dataType: 'Type2', primary: true, editing: false },
-  //   // Add more columns as needed
-  // ];
   selectedDataType: string = '';
+  oldCol:any[]=[];
   
 
   constructor(
@@ -69,6 +64,10 @@ export class TableDescriptionComponent {
     
     this.column.forEach((col) => (col.editing = false));
     column.editing = false;
+    console.log("new data",column);
+    console.log("olddata", this.oldCol);
+    
+    
   }
 
   cancelEdit(column: any): void {
@@ -88,6 +87,7 @@ OnSelectedDataType(event:any, columnIndex:number, column:Column){
 
 toggleEditMode(): void {
   this.column.forEach((col) => (col.editing = true));
+  this.oldCol = this.column;
 }
 hasPrimaryKey(column: any): boolean {
   return this.column.some((col) => col.primary && col !== column);

@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -58,4 +60,18 @@ public class TableController {
        }
 
     }
+
+
+    // In TableController.java
+
+    @GetMapping("/getData/{tableName}")
+    public ResponseEntity<List<Map<String, Object>>> getTableData(@PathVariable String tableName) {
+        try {
+            List<Map<String, Object>> tableData = tableService.getTableData(tableName);
+            return ResponseEntity.ok().body(tableData);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Collections.emptyList());
+        }
+    }
+
 }

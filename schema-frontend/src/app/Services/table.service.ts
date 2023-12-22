@@ -29,4 +29,9 @@ export class TableService {
   deleteTable(tableName:any):Observable<any>{
     return this.http.delete<any>(`${environment.backendUrl}schema/deleteTable/${tableName}`);
   }
+
+  fetchTableData(tableName: string): Observable<any[]> {
+    const url = `${environment.backendUrl}schema/getData/${tableName}`; // Adjust the endpoint as needed
+    return this.http.get<any[]>(url);
+  }
 }

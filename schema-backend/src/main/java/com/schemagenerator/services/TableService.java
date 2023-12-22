@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TableService {
@@ -121,5 +122,18 @@ public class TableService {
         // If the execution reaches here, the table was deleted successfully
         return ResponseEntity.status(200).body(new ApiResponse("Table deleted successfully"));
     }
+
+    // In TableService.java
+
+    public List<Map<String, Object>> getTableData(String tableName) {
+        String sql = "SELECT * FROM " + tableName;
+        try {
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error fetching table data", e);
+        }
+    }
+
 
 }
