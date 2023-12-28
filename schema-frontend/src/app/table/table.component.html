@@ -22,6 +22,25 @@
   <!-- <button class="btn btn-primary" (click)="applyChanges()">Apply Changes</button> -->
 <!-- </div>  -->
 
+<!-- <div class="table-responsive wrapper text-center">
+  <table class="table">
+    <thead class="table-light">
+      <tr>
+        <th scope="col">#</th>
+        <th *ngFor="let columnName of columnNames" scope="col">{{ columnName }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of columnData; let i = index">
+        <td scope="row">{{ i + 1 }}</td>
+        <td *ngFor="let columnName of columnNames">{{ row[columnName] }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> -->
+
+
+
 <div class="table-responsive wrapper text-center">
   <table class="table">
     <thead class="table-light">
@@ -37,6 +56,16 @@
         <!-- Loop through columns and generate td elements -->
         <td *ngFor="let columnName of columnNames">{{ row[columnName] }}</td>
       </tr>
+      <!-- New row for user input -->
+      <tr>
+        <td></td>
+        <td *ngFor="let columnName of columnNames">
+          <input [(ngModel)]="newRow[columnName]" class="form-control" placeholder="{{ columnName }}">
+        </td>
+      </tr>
     </tbody>
   </table>
+
+  <!-- Button to add a new row -->
+  <button class="btn btn-primary" (click)="addRow()">Add Row</button>
 </div>

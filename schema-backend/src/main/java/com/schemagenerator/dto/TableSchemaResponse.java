@@ -10,5 +10,5 @@ import java.util.List;
 @ToString
 @Builder
 public class TableSchemaResponse {
-    private List<Column> columns;
+     List<Column> columns;
 }

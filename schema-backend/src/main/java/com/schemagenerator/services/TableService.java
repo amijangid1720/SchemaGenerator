@@ -1,17 +1,19 @@
 package com.schemagenerator.services;
 
-import com.schemagenerator.dto.ApiResponse;
-import com.schemagenerator.dto.Column;
-import com.schemagenerator.dto.CreateTableRequest;
-import com.schemagenerator.dto.TableSchemaResponse;
+import com.schemagenerator.dto.*;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import com.schemagenerator.entity.Tables;
-import com.schemagenerator.dao.TableRepository;
+import com.schemagenerator.dao.TableRepo.TableRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,14 @@ import java.util.Map;
 @Service
 public class TableService {
 
+
+
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    public TableService(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -136,4 +146,61 @@ public class TableService {
     }
 
 
+    @Transactional(rollbackOn = Exception.class)
+    public void addRowData(String tableName, Map<String, Object> data) throws Exception {
+        // Formulate the SQL query to insert data into the table
+        StringBuilder sql = new StringBuilder("INSERT INTO " + tableName + " (");
+        StringBuilder values = new StringBuilder(") VALUES (");
+
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            sql.append(entry.getKey()).append(", ");
+            values.append(":" + entry.getKey() + ", ");
+        }
+
+        // Remove the trailing commas and spaces
+        sql.delete(sql.length() - 2, sql.length());
+        values.delete(values.length() - 2, values.length());
+
+        sql.append(values).append(")");
+
+        // Print the generated SQL query
+        System.out.println("Generated SQL Query: " + sql.toString());
+
+        try {
+            // Convert data values to appropriate types before executing the query
+            MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                Object convertedValue = convertToDataType(entry.getValue());
+                parameterSource.addValue(entry.getKey(), convertedValue);
+
+                // Print the data type information
+//                System.out.println("Data Type of " + entry.getKey() + ": " + convertedValue.getClass().getSimpleName());
+            }
+
+            namedParameterJdbcTemplate.update(sql.toString(), parameterSource);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error adding data to table", e);
+        }
+    }
+
+
+    private Object convertToDataType(Object value) {
+        if (value instanceof String) {
+            return value;
+        } else if (value instanceof Integer) {
+            return value;
+        } else if (value instanceof Long) {
+            return value;
+        } else if (value instanceof Double) {
+            return value;
+        } else if (value instanceof Float) {
+            return value;
+        } else if (value instanceof Boolean) {
+            return value;
+        } else {
+            // Handle other data types as needed
+            return value.toString(); // Default to String if the type is not recognized
+        }
+    }
 }
