@@ -1,9 +1,9 @@
   <!-- <div class="card d-flex shadow-lg p-3 mb-1 bg-white rounded wrapper"> -->
-    <div class="card d-flex mb-1 bg-white rounded wrapper">
+    <div class="card d-flex mb-1 bg-white rounded wrapper"  [ngClass]="{'collapsed': isCollapsed}">
 
     <a class="head" routerLink="createtable">
       <h4>
-        <fa-icon [icon]="faPlus"  size="1x" [styles]="{  color: '#eec06b'  ,'font-size': '35px' ,'padding-right':'5px'}"></fa-icon>
+        <fa-icon [icon]="faPlus"  size="1x" [styles]="{  color: '#333341'  ,'font-size': '35px' ,'padding-right':'5px'}"></fa-icon>
         Create New Table
       </h4>
     </a>
@@ -13,13 +13,13 @@
       <fa-icon [icon]="faGreaterThan" [styles]="{ color: '#B6BBC4;'  ,'font-size': '15px' ,'padding-right':'9px'}"></fa-icon>
       <span>{{ tableName }}</span>
       <a [routerLink]="['table', tableName]">
-        <fa-icon [icon]="faTable" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'20px'}"></fa-icon>
+        <fa-icon [icon]="faTable" [styles]="{ margin: '2px', color: '#333341'  ,'font-size': '18px' ,'padding-left':'20px'}"></fa-icon>
       </a>
       <a [routerLink]="['tabledesc',tableName]">
-        <fa-icon [icon]="faWrench" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'5px'}"></fa-icon>
+        <fa-icon [icon]="faWrench" [styles]="{ margin: '2px', color: '#333341'  ,'font-size': '18px' ,'padding-left':'5px'}"></fa-icon>
       </a>
       <a  (click)="deleteTable(tableName)">
-        <fa-icon [icon]="faTrashCan" [styles]="{ margin: '2px', color: '#eec06b'  ,'font-size': '18px' ,'padding-left':'5px'}"
+        <fa-icon [icon]="faTrashCan" [styles]="{ margin: '2px', color: '#333341'  ,'font-size': '18px' ,'padding-left':'5px'}"
         ></fa-icon>
       </a>
     </li>
@@ -54,3 +54,8 @@
       ></button>
     </ng-template>
   </p-confirmDialog> 
+
+
+  
+
+  

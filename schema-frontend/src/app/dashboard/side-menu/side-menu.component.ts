@@ -16,6 +16,8 @@ export class SideMenuComponent implements OnInit {
   faGreaterThan=faGreaterThan;
   faTrashCan=faTrashCan;
 
+  isCollapsed = false;
+
 
   constructor(private tableService:TableService,
     private messageService: MessageService,
@@ -60,5 +62,10 @@ export class SideMenuComponent implements OnInit {
       },
     });
 
+  }
+
+
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
   }
 }

@@ -60,12 +60,12 @@
       <tr>
         <td></td>
         <td *ngFor="let columnName of columnNames">
-          <input [(ngModel)]="newRow[columnName]" class="form-control" placeholder="{{ columnName }}">
+          <input [(ngModel)]="newRow[columnName]" class="form-control add-row-input" placeholder="{{ columnName }}">
         </td>
       </tr>
     </tbody>
   </table>
 
   <!-- Button to add a new row -->
-  <button class="btn btn-primary" (click)="addRow()">Add Row</button>
+  <button class="btn addButton" (click)="addRow()">Add Row</button>
 </div>
