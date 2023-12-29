@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,9 @@ public class TableService {
     private TableRepository tableRepository;
 
 
-
     @PersistenceContext
     private EntityManager entityManager;
+
     @Transactional(rollbackOn = Exception.class)
     public void createTable(CreateTableRequest request) throws Exception {
         String tableName = request.getTableName();
@@ -95,7 +96,7 @@ public class TableService {
         //convert result to List<Column>
 
         List<Column> columns = result.stream()
-                .map(row -> new Column((String) row[0], (boolean) row[2], (String) row[1]))
+                .map(row -> new Column((String) row[0], null, (boolean) row[2], false, (String) row[1], null))
                 .toList();
 
 
@@ -112,7 +113,7 @@ public class TableService {
     }
 
     public ResponseEntity<ApiResponse> deleteTable(String tableName) {
-        Tables table=tableRepository.findByTableName(tableName).get();
+        Tables table = tableRepository.findByTableName(tableName).get();
         // Formulate the SQL query to drop the table
         String sql = "DROP TABLE " + tableName;
 
@@ -135,5 +136,92 @@ public class TableService {
         }
     }
 
+    @Transactional(rollbackOn = Exception.class)
+    public void updateTableSchema(String tableName, List<Column> updatedColumns) throws Exception {
+        boolean flag=false;
+        try {
+            for (Column updatedColumn : updatedColumns) {
+                // If the column name is updated, use the CHANGE COLUMN clause
+                if (!updatedColumn.getName().equals(updatedColumn.getOldName())) {
+                    alterColumnName(tableName, updatedColumn.getOldName(), updatedColumn.getName());
+                }
+
+                // If the data type is updated, use the MODIFY COLUMN clause
+                if (!updatedColumn.getDataType().equals(updatedColumn.getOlddataType())) {
+                    alterColumnType(tableName, updatedColumn.getName(), updatedColumn.getDataType());
+                }
+
+                // If the primary key is updated, handle it accordingly
+                if (updatedColumn.isPrimary() != updatedColumn.isOldIsPrimary()) {
+                    //Drop the tables primary key
+                    flag=true;
+
+                }
+            }
+
+            if(flag)
+            {
+                dropTablesPrimaryKey(tableName);
+                for(Column column : updatedColumns)
+                {
+                    alterPrimaryKey(tableName,column.getName(),column.isPrimary());
+                }
+            }
+        } catch (Exception e) {
+            throw new Exception("Error updating table schema" + e.getMessage());
+        }
+    }
+
+    private void alterColumnName(String tableName, String oldName, String newName) {
+        String sql = "ALTER TABLE " + tableName + " RENAME COLUMN " + oldName + " " + "TO" + " " + newName;
+        jdbcTemplate.execute(sql);
+
+    }
+
+    private void alterColumnType(String tableName, String columnName, String dataType) {
+        dataType = dataType.toUpperCase();
+        if (dataType.equals("VARCHAR(255)"))
+            dataType = "VARCHAR";
+        String sql = "ALTER TABLE " + tableName + " ALTER COLUMN " + columnName + " " + "TYPE" + " " + dataType + " " + "USING " + columnName + "::" + dataType;
+//
+
+
+        try {
+            jdbcTemplate.execute(sql);
+        } catch (Exception s) {
+            System.out.println(s.getMessage());
+        }
+
+        System.out.println("3");
+    }
+
+
+    @Transactional
+
+    private void alterPrimaryKey(String tableName, String columnName, boolean newPrimary) {
+        try {
+
+            if (newPrimary) {
+                String addPrimaryKeySql = "ALTER TABLE " + tableName + " ADD PRIMARY KEY (" + columnName + ")";
+                jdbcTemplate.execute(addPrimaryKeySql);
+            }
+
+            System.out.println("Operation successful");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void dropTablesPrimaryKey( String tableName){
+        String constraintQuery = "SELECT constraint_name " +
+                "FROM information_schema.table_constraints " +
+                "WHERE table_name = '" + tableName.toLowerCase() + "' AND constraint_type = 'PRIMARY KEY'";
+
+        String constraintName = jdbcTemplate.queryForObject(constraintQuery, String.class);
+
+        // Drop the primary key constraint
+        String dropConstraintSql = "ALTER TABLE " + tableName + " DROP CONSTRAINT " + constraintName;
+        jdbcTemplate.execute(dropConstraintSql);
+    }
 
 }

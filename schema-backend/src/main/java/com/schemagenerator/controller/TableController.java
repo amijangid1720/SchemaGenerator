@@ -1,10 +1,7 @@
 package com.schemagenerator.controller;
 
 
-import com.schemagenerator.dto.ApiResponse;
-import com.schemagenerator.dto.Column;
-import com.schemagenerator.dto.CreateTableRequest;
-import com.schemagenerator.dto.TableSchemaResponse;
+import com.schemagenerator.dto.*;
 import com.schemagenerator.services.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +68,17 @@ public class TableController {
             return ResponseEntity.ok().body(tableData);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Collections.emptyList());
+        }
+    }
+
+    @PutMapping("/update-schema/{tableName}")
+    public ResponseEntity<ApiResponse> updateTableSchema(@PathVariable String tableName, @RequestBody UpdateTableRequest updatedSchema) {
+        try {
+            List<Column>updatedColumns=updatedSchema.getColumns();
+            tableService.updateTableSchema(tableName, updatedColumns);
+            return ResponseEntity.ok().body(new ApiResponse("Table schema updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ApiResponse("Failed to update table schema"));
         }
     }
 

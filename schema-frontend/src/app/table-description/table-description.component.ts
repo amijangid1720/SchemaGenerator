@@ -10,7 +10,7 @@ import { Column } from '../Models/Column';
   styleUrls: ['./table-description.component.css']
 })
 export class TableDescriptionComponent {
-  tablename:String='student11';
+  tablename:string='';
   column:any[]=[];
   primaryKeyVisibility: boolean = true;
   selectedPrimaryIndex: number | null = null;
@@ -25,7 +25,8 @@ export class TableDescriptionComponent {
  
   ngOnInit(){
     this.route.paramMap.pipe(switchMap(params =>  {
-       const tableName =params.get('tableName'); 
+       const tableName =params.get('tableName');
+       this.tablename=params.get('tableName');
        return this.schemaGenerator.fetchSchema(tableName);     
     }))
     .subscribe({next:(response:any) =>{
@@ -59,21 +60,32 @@ export class TableDescriptionComponent {
   }
   
 
-  saveColumn(column: any): void {
-    // Save the changes and set the editing state to false
-    
-    this.column.forEach((col) => (col.editing = false));
-    column.editing = false;
-    console.log("new data",column);
-    console.log("olddata", this.oldCol);
-    
-    
+  saveTable(): void {
+    // Assuming you have a service method named updateTableSchema in SchemaGeneratorService
+    this.schemaGenerator.updateTableSchema(this.tablename, this.column)
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          // Handle the response, show success message, etc.
+        },
+        error: (error) => {
+          console.error(error);
+          // Handle the error, show error message, etc.
+        }
+      });
   }
 
   cancelEdit(column: any): void {
     // Cancel the edit and set the editing state to false
-    this.column.forEach((col) => (col.editing = false));
-    column.editing = false;
+    this.column.forEach((col) => {
+      col.editing = false;
+      // Revert changes by restoring the values from the backup
+      col.name = col.oldName;
+      col.dataType = col.olddataType;
+      col.primary = col.oldIsPrimary;
+    });
+  
+    
   }
 
 OnSelectedDataType(event:any, columnIndex:number, column:Column){
@@ -86,8 +98,13 @@ OnSelectedDataType(event:any, columnIndex:number, column:Column){
 }
 
 toggleEditMode(): void {
-  this.column.forEach((col) => (col.editing = true));
-  this.oldCol = this.column;
+  this.column.forEach((col) => {
+    col.editing = true;
+    col.oldName = col.name;
+    col.olddataType = col.dataType;
+    col.oldIsPrimary = col.primary;
+  });
+  this.oldCol = this.column.map((col) => ({ ...col }));
 }
 hasPrimaryKey(column: any): boolean {
   return this.column.some((col) => col.primary && col !== column);

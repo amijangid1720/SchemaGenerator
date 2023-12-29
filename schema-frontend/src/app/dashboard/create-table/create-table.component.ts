@@ -48,8 +48,11 @@ export class CreateTableComponent {
       for (let i = 0; i < columnsToAdd; i++) {
         const newColumn: Column = {
           name: '',
+          oldName:'',
           primary: false,
+          oldPrimary:false,
           dataType: '',
+          oldDataType:''
         };
         this.inputValues.push(newColumn);
       }
@@ -78,8 +81,11 @@ export class CreateTableComponent {
       tableName: this.tablename,
       columns: this.inputValues.map((column) => ({
         name: column.name,
+        oldName:null,
         primary: column.primary,
+        oldPrimary:false,
         dataType: column.dataType,
+        oldDataType:null
       })),
     };
     this.schemaGenerator.generateTable(requestPayload).subscribe({
