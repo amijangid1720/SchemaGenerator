@@ -34,4 +34,9 @@ export class TableService {
     const url = `${environment.backendUrl}schema/getData/${tableName}`; // Adjust the endpoint as needed
     return this.http.get<any[]>(url);
   }
+
+  addRow(tableName:any, newRow:any):Observable<any>{
+    const url =`${environment.backendUrl}schema/addRow/${tableName}`;
+    return this.http.post<any>(url,newRow);
+  }
 }

@@ -7,7 +7,7 @@
     margin-top: 5%;
     margin-right: 16%;
     margin-left: 11%;
-    background-color: #f0f8ff94;
+    /* background-color: #f0f8ff94; */
     /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
      /* box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 1px 20px 0 rgba(0, 0, 0, 0.19); */
     box-shadow:  0 3px 7px 0 rgb(216 204 204), 0 6px 24px 0 rgb(255 253 253 / 48%)
@@ -30,3 +30,19 @@ td{
     text-align: center;
     padding: 1%;
 }
+
+.addButton{
+    background-color: #333341;
+    color: white;
+    margin: 1%;
+}
+.addButton:hover{
+    background-color: #B6BBC4;
+}
+
+.add-row-input {
+    text-align: center; /* Center the text in the input */
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+  }

@@ -2,15 +2,16 @@ package com.schemagenerator.controller;
 
 
 import com.schemagenerator.dto.*;
+import com.schemagenerator.dto.*;
 import com.schemagenerator.services.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -59,8 +60,7 @@ public class TableController {
     }
 
 
-    // In TableController.java
-
+    // for fetching data from the table
     @GetMapping("/getData/{tableName}")
     public ResponseEntity<List<Map<String, Object>>> getTableData(@PathVariable String tableName) {
         try {
@@ -82,4 +82,21 @@ public class TableController {
         }
     }
 
-}
+
+
+
+    @PostMapping("/addRow/{tableName}")
+    public ResponseEntity<ApiResponse> addRow(@PathVariable String tableName, @RequestBody Map<String,Object> data){
+        try{
+            tableService.addRowData(tableName, data);
+            return ResponseEntity.ok().body(new ApiResponse("Data added successfully to table: " + tableName));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(new ApiResponse("Failed to add data to table: " + tableName));
+        }
+        }
+    }
+
+
+
+
+
