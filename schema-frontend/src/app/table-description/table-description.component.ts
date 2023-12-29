@@ -3,6 +3,7 @@ import { SchemaGeneratorService } from '../Services/schema-generator.service';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { Column } from '../Models/Column';
+import { ToasterService } from '../Services/toaster.service';
 
 @Component({
   selector: 'app-table-description',
@@ -20,7 +21,8 @@ export class TableDescriptionComponent {
 
   constructor(
     private schemaGenerator: SchemaGeneratorService,
-    private route:ActivatedRoute
+    private route:ActivatedRoute,
+    private toaster: ToasterService,
   ){}
  
   ngOnInit(){
@@ -66,10 +68,13 @@ export class TableDescriptionComponent {
       .subscribe({
         next: (response) => {
           console.log(response);
+          this.toaster.showSuccess('Updated scuccessfully', 'Saved');
           // Handle the response, show success message, etc.
         },
         error: (error) => {
           console.error(error);
+          this.toaster.showError('Failed to Update Schema','Failed');
+          
           // Handle the error, show error message, etc.
         }
       });

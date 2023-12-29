@@ -75,6 +75,14 @@ export class CreateTableComponent {
 
 
   generateTable1() {
+
+
+    const hasPrimaryKey = this.inputValues.some(column => column.primary);
+
+    if(!hasPrimaryKey){
+      this.toaster.showError('At least one primary key is needed','Error');
+      return;
+    }
    
     // Prepare the request payload
     const requestPayload = {
@@ -91,15 +99,22 @@ export class CreateTableComponent {
     this.schemaGenerator.generateTable(requestPayload).subscribe({
       next: (response) => {
         console.log(response);
-        this.tableService.getTableNames();
-        
-      this.toaster.showSuccess();
+        this.tableService.getTableNames();   
+      this.toaster.showSuccess('Table created Successfully!', 'Success!');
+
+      //reset table after successfull table creation
+      this.tablename = '';
+      this.columns = 0;
+      this.inputValues = [];
+      this.primary = false;
+      this.primaryKeyVisibility = true;
+      this.selectedPrimaryIndex = null;
+      this.selectedDataType = '';
       },
       error: (err) => {
          console.log("error");
-        
         console.log(err.message);
-        this.toaster.showfailure();
+        this.toaster.showError('Failed to create table', 'Failed!');
       },
     });
   

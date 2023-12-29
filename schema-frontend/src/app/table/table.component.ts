@@ -109,7 +109,7 @@ column: any[] = [];
       this.tableService.addRow(this.tableName, this.newRow).subscribe(
         (response: any) => {
           console.log('Row added successfully', response);
-          this.toaster.dataSuccess();
+          this.toaster.showSuccess('Data added successfully!','Success!');
           
     
           // Optionally, you can update this part based on your use case
@@ -119,7 +119,7 @@ column: any[] = [];
         },
         (error) => {
           console.log("Failed to add row", error);
-          this.toaster.dataAddingFailed();
+          this.toaster.showError('Failed to Add Data', 'Failed!');
         }
       );
     }

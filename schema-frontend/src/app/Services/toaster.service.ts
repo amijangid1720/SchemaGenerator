@@ -11,18 +11,11 @@ export class ToasterService {
     private toastr: ToastrService
   ) { }
 
-  showSuccess() {
-    this.toastr.success('Table created successfully!', 'Success!');
+  showError(msg,err){
+    this.toastr.error(msg,err);
   }
-  showfailure(){
-    this.toastr.error('Failed to create table!','Failed!');
+  showSuccess(msg,success) {
+    this.toastr.success(msg,success);
   }
-  
-  dataSuccess(){
-    this.toastr.success('Data added successfully!', 'Success!');
-  }
-
-  dataAddingFailed(){
-    this.toastr.error('Failed to add data!', 'Failed!');
-  }
+ 
 }
