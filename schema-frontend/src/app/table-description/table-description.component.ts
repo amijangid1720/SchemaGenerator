@@ -67,6 +67,10 @@ export class TableDescriptionComponent {
         next: (response) => {
           console.log(response);
           // Handle the response, show success message, etc.
+          this.column.forEach((col) => {
+            col.editing = false;
+            // Revert changes by restoring the values from the backup
+          });
         },
         error: (error) => {
           console.error(error);
