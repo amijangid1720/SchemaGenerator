@@ -1,58 +1,28 @@
-<!-- <div class="table-responsive{-sm|-md|-lg|-xl|-xxl} wrapper text-center">
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-        <th scope="col" >Column Names</th>
+<div class="table-responsive{-sm|-md|-lg|-xl|-xxl} wrapper text-center">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Column Names</th>
         <th scope="col">Data Types</th>
         <th scope="col">PK</th>
+        <th scope="col">Constraints</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let column of column; let i = index">
+      <tr
+        *ngFor="let column of column; let i = index"
+        [class.editable]="column.editing"
+      >
         <td scope="row">{{ i + 1 }}</td>
-        <td >{{ column.name }}</td>
-        <td>{{ column.dataType }}</td>
         <td>
-            <div class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="radio"
-                name="primaryKey{{ i }}"
-                [checked]="column.primary"
-                disabled
-              />
-              
-            </div>
-          </td>
-      </tr>
-    </tbody>
-  </table>
-  </div> -->
-
-
-  <div class="table-responsive{-sm|-md|-lg|-xl|-xxl} wrapper text-center">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Column Names</th>
-          <th scope="col">Data Types</th>
-          <th scope="col">PK</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let column of column; let i = index" [class.editable]="column.editing">
-          <td scope="row">{{ i + 1 }}</td>
-          <td>
-            <span *ngIf="!column.editing">{{ column.name }}</span>
-            <input *ngIf="column.editing" [(ngModel)]="column.name" />
-          </td>
-          <td>
-            <span *ngIf="!column.editing">{{ column.dataType }}</span>
-            <div *ngIf="column.editing"  class="drop">
-              <a
+          <span *ngIf="!column.editing">{{ column.name }}</span>
+          <input *ngIf="column.editing" [(ngModel)]="column.name" />
+        </td>
+        <td>
+          <span *ngIf="!column.editing">{{ column.dataType }}</span>
+          <div *ngIf="column.editing" class="drop">
+            <a
               class="btn btn-secondary dropdown-toggle"
               role="button"
               id="dropdownMenuLink"
@@ -76,7 +46,6 @@
                   class="dropdown-item"
                   name="varchar(255)"
                   (click)="OnSelectedDataType($event, i, column)"
-                  
                   >VARCHAR()</a
                 >
               </li>
@@ -85,7 +54,6 @@
                   class="dropdown-item"
                   name="text"
                   (click)="OnSelectedDataType($event, i, column)"
-                  
                   >TEXT</a
                 >
               </li>
@@ -94,44 +62,57 @@
                   class="dropdown-item"
                   name="double precision"
                   (click)="OnSelectedDataType($event, i, column)"
-                  
                   >DOUBLE PRECISION</a
                 >
               </li>
-              </ul>
-            </div>
-
-          </td>
-          <td>
+            </ul>
+          </div>
+        </td>
+        <td>
           <div *ngIf="!column.editing">
-         <input type="radio"
-         id="flexCheckDefault"
-         [disabled]="!primaryKeyVisibility"
-         [attr.readonly]="true"
-         [checked]=column.primary
-         style="cursor: not-allowed"
-        disabled
-        (click)="uneditable($event, i)"
-           >
-        </div>
+            <input
+              type="radio"
+              id="flexCheckDefault"
+              [disabled]="!primaryKeyVisibility"
+              [attr.readonly]="true"
+              [checked]="column.primary"
+              style="cursor: not-allowed"
+              disabled
+              (click)="uneditable($event, i)"
+            />
+          </div>
 
-        <div *ngIf="column.editing">
-          <input type="radio"
-          id="flexCheckDefault"
-          [disabled]="!primaryKeyVisibility"
-          [checked]="column.primary"
-          (click)="checkVisibility(i)">
+          <div *ngIf="column.editing">
+            <input
+              type="radio"
+              id="flexCheckDefault"
+              [disabled]="!primaryKeyVisibility"
+              [checked]="column.primary"
+              (click)="checkVisibility(i)"
+            />
+          </div>
+        </td>
+        <td>
+          <div *ngIf="!column.editing && column.foreignKey">
+            <span
+              class="badge bg-info"
+              data-bs-toggle="tooltip"
+              data-bs-placement="left"
+              [title]="
+                column.referencedTable + '(' + column.referencedColumn + ')'
+              "
+              >Foreign Key</span
+            >
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-        </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-    <div class="text-center  bottom">
-      <button class="btn btn-dark" (click)="toggleEditMode()">Edit Table</button>
-      <button class="btn btn-success" (click)="saveTable()">Save</button>
-      <button class=" btn btn-danger" (click)="cancelEdit(column)"> Cancel</button>
-    </div>
- 
+<div class="text-center bottom">
+  <button class="btn btn-dark" (click)="toggleEditMode()">Edit Table</button>
+  <button class="btn btn-success" (click)="saveTable()">Save</button>
+  <button class="btn btn-danger" (click)="cancelEdit(column)">Cancel</button>
+</div>
+

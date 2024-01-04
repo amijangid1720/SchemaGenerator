@@ -15,7 +15,7 @@ export class SideMenuComponent implements OnInit {
   faWrench=faWrench;
   faGreaterThan=faGreaterThan;
   faTrashCan=faTrashCan;
-
+  faCirclePlus=faCirclePlus;
   isCollapsed = false;
 
 
@@ -36,7 +36,6 @@ export class SideMenuComponent implements OnInit {
   deleteTable(tableName:any){
     this.confirmationService.confirm({  
       accept: () => {
-        console.log(tableName);
         this.tableService.deleteTable(tableName).subscribe(
           (data) => {
           this.tableNames= this.tableNames.filter((element)=>{

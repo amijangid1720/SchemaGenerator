@@ -6,14 +6,13 @@ import { ToasterService } from '../../Services/toaster.service';
 import { Column } from '../../Models/Column';
 import { TableService } from 'src/app/Services/table.service';
 
-
 @Component({
   selector: 'app-create-table',
   templateUrl: './create-table.component.html',
-  styleUrls: ['./create-table.component.css']
+  styleUrls: ['./create-table.component.css'],
 })
 export class CreateTableComponent {
-  faXmark=faXmark;
+  faXmark = faXmark;
   tablename: string = '';
   columns: number = 0;
   inputValues: Column[] = []; // Use an array to store values for each input
@@ -22,23 +21,19 @@ export class CreateTableComponent {
   selectedPrimaryIndex: number | null = null;
   selectedDataType: string = '';
 
-
   constructor(
     private http: HttpClient,
     private schemaGenerator: SchemaGeneratorService,
     private toaster: ToasterService,
-    private cdr: ChangeDetectorRef ,
-    private tableService:TableService
+    private cdr: ChangeDetectorRef,
+    private tableService: TableService
   ) {}
   OnSelectedDataType(event: any, columnIndex: number, column: Column) {
-    console.log(event);
-    console.log(columnIndex);
-    console.log(column);
+    
     column.dataType = event.target.name;
   }
-  reduceColumns(){
-    this.columns=this.columns-1;
-    
+  reduceColumns() {
+    this.columns = this.columns - 1;
   }
   onColumnsChange(val: any) {
     const currentColumnCount = this.inputValues.length;
@@ -48,11 +43,14 @@ export class CreateTableComponent {
       for (let i = 0; i < columnsToAdd; i++) {
         const newColumn: Column = {
           name: '',
-          oldName:'',
+          oldName: '',
           primary: false,
-          oldPrimary:false,
+          oldPrimary: false,
           dataType: '',
-          oldDataType:''
+          oldDataType: '',
+          foreignKey: false,
+          referencedTable: '',
+          referencedColumn: '',
         };
         this.inputValues.push(newColumn);
       }
@@ -73,36 +71,39 @@ export class CreateTableComponent {
     });
   }
 
-
   generateTable1() {
-   
     // Prepare the request payload
     const requestPayload = {
       tableName: this.tablename,
       columns: this.inputValues.map((column) => ({
         name: column.name,
-        oldName:null,
+        oldName: null,
         primary: column.primary,
-        oldPrimary:false,
+        oldPrimary: false,
         dataType: column.dataType,
-        oldDataType:null
+        oldDataType: null,
+        foreignKey: column.foreignKey,
+        referencedTable:column.referencedTable,
+        referencedColumn:column.referencedColumn,
       })),
     };
+
+    console.log(requestPayload);
+    
     this.schemaGenerator.generateTable(requestPayload).subscribe({
       next: (response) => {
         console.log(response);
         this.tableService.getTableNames();
-        
-      this.toaster.showSuccess();
+
+        this.toaster.showSuccess();
       },
       error: (err) => {
-         console.log("error");
-        
+        console.log('error');
+
         console.log(err.message);
         this.toaster.showfailure();
       },
     });
-  
   }
 
   // Function to delete a column based on its index
@@ -118,5 +119,5 @@ export class CreateTableComponent {
     // Trigger change detection
     this.cdr.detectChanges();
   }
-
+  showForeignKeyFields() {}
 }

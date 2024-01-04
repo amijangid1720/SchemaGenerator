@@ -18,6 +18,9 @@
       <a [routerLink]="['tabledesc',tableName]">
         <fa-icon [icon]="faWrench" [styles]="{ margin: '2px', color: '#333341'  ,'font-size': '18px' ,'padding-left':'5px'}"></fa-icon>
       </a>
+      <a [routerLink]="['addForeignKey',tableName]">
+        <fa-icon [icon]="faCirclePlus" [styles]="{ margin: '2px', color: '#333341'  ,'font-size': '18px' ,'padding-left':'5px'}"></fa-icon>
+      </a>
       <a  (click)="deleteTable(tableName)">
         <fa-icon [icon]="faTrashCan" [styles]="{ margin: '2px', color: '#333341'  ,'font-size': '18px' ,'padding-left':'5px'}"
         ></fa-icon>

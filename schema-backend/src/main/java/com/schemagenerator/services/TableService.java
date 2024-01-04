@@ -9,6 +9,7 @@ import com.schemagenerator.dao.TableRepo.TableRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,12 +18,12 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class TableService {
-
 
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -31,6 +32,7 @@ public class TableService {
     public TableService(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -53,9 +55,16 @@ public class TableService {
 
             if (column.isPrimary()) {
                 sql.append(" PRIMARY KEY");
-            }
 
+            } else if (column.isForeignKey()) {
+                sql.append(", CONSTRAINT fk_" + tableName + "_" + column.getName() +
+                        " FOREIGN KEY (" + column.getName() + ") REFERENCES " +
+                        column.getReferencedTable() + "(" + column.getReferencedColumn() + ") " +
+                        "ON DELETE CASCADE");
+
+            }
             sql.append(", ");
+
         }
 
         // Remove the trailing comma and space
@@ -90,7 +99,14 @@ public class TableService {
                 "   JOIN information_schema.table_constraints tc " +
                 "     ON kcu.constraint_name = tc.constraint_name " +
                 "   WHERE tc.table_name = :tableName AND tc.constraint_type = 'PRIMARY KEY' " +
-                ") THEN true ELSE false END as isPrimary " +
+                ") THEN true ELSE false END as isPrimary, " +
+                "CASE WHEN column_name = ANY (" +
+                "   SELECT kcu.column_name " +
+                "   FROM information_schema.key_column_usage kcu " +
+                "   JOIN information_schema.table_constraints tc " +
+                "     ON kcu.constraint_name = tc.constraint_name " +
+                "   WHERE tc.table_name = :tableName AND tc.constraint_type = 'FOREIGN KEY' " +
+                ") THEN true ELSE false END as isForeignKey " +
                 "FROM information_schema.columns " +
                 "WHERE table_name = :tableName";
 
@@ -106,7 +122,7 @@ public class TableService {
         //convert result to List<Column>
 
         List<Column> columns = result.stream()
-                .map(row -> new Column((String) row[0], null, (boolean) row[2], false, (String) row[1], null))
+                .map(row -> new Column((String) row[0], null, (boolean) row[2], false, (String) row[1], null,(Boolean) row[3],null,null))
                 .toList();
 
 
@@ -148,7 +164,7 @@ public class TableService {
 
     @Transactional(rollbackOn = Exception.class)
     public void updateTableSchema(String tableName, List<Column> updatedColumns) throws Exception {
-        boolean flag=false;
+        boolean flag = false;
         try {
             for (Column updatedColumn : updatedColumns) {
                 // If the column name is updated, use the CHANGE COLUMN clause
@@ -164,17 +180,15 @@ public class TableService {
                 // If the primary key is updated, handle it accordingly
                 if (updatedColumn.isPrimary() != updatedColumn.isOldIsPrimary()) {
                     //Drop the tables primary key
-                    flag=true;
+                    flag = true;
 
                 }
             }
 
-            if(flag)
-            {
+            if (flag) {
                 dropTablesPrimaryKey(tableName);
-                for(Column column : updatedColumns)
-                {
-                    alterPrimaryKey(tableName,column.getName(),column.isPrimary());
+                for (Column column : updatedColumns) {
+                    alterPrimaryKey(tableName, column.getName(), column.isPrimary());
                 }
             }
         } catch (Exception e) {
@@ -222,7 +236,7 @@ public class TableService {
         }
     }
 
-    public void dropTablesPrimaryKey( String tableName){
+    public void dropTablesPrimaryKey(String tableName) {
         String constraintQuery = "SELECT constraint_name " +
                 "FROM information_schema.table_constraints " +
                 "WHERE table_name = '" + tableName.toLowerCase() + "' AND constraint_type = 'PRIMARY KEY'";
