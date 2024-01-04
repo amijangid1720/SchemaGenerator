@@ -33,15 +33,15 @@ export class TableDescriptionComponent {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('Response of fetch Schema');
+          //console.log('Response of fetch Schema');
 
-          console.log(response);
+          //console.log(response);
 
           this.column = response.columns;
-          console.log(this.column);
+          //console.log(this.column);
         },
         error: (err) => {
-          console.log(err);
+          //console.log(err);
         },
       });
   }
@@ -54,7 +54,7 @@ export class TableDescriptionComponent {
 
   uneditable(event: Event, index: number) {
     event.preventDefault();
-    console.log('Primary key clicked:', index);
+    //console.log('Primary key clicked:', index);
     // Your existing logic for updating primary keys can go here
   }
 
@@ -64,7 +64,7 @@ export class TableDescriptionComponent {
       .updateTableSchema(this.tablename, this.column)
       .subscribe({
         next: (response) => {
-          console.log(response);
+          //console.log(response);
           // Handle the response, show success message, etc.
           this.column.forEach((col) => {
             col.editing = false;
@@ -90,11 +90,11 @@ export class TableDescriptionComponent {
   }
 
   OnSelectedDataType(event: any, columnIndex: number, column: Column) {
-    console.log(event);
-    console.log(columnIndex);
-    console.log(column);
+    //console.log(event);
+    //console.log(columnIndex);
+    //console.log(column);
     column.dataType = event.target.name;
-    console.log(column.dataType);
+    //console.log(column.dataType);
   }
 
   toggleEditMode(): void {
@@ -111,7 +111,7 @@ export class TableDescriptionComponent {
   }
 
   getToolTip(column : Column) {
-    console.log(column);
+    //console.log(column);
     
     return column.referencedTable +"("+column.referencedColumn+")";
   }

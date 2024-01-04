@@ -305,4 +305,27 @@ public class TableService {
             return value.toString(); // Default to String if the type is not recognized
         }
     }
+
+    public void addForeignKey(ForeignKeyRequest request) throws Exception {
+        String tableName = request.getTableName();
+        String columnName = request.getColumnName();
+        String referencedTable = request.getReferencedTable();
+        String referencedColumn = request.getReferencedColumn();
+
+        try {
+            // Generate SQL statement for adding a foreign key constraint
+            String sql = "ALTER TABLE " + tableName +
+                    " ADD CONSTRAINT fk_" + tableName + "_" + columnName +
+                    " FOREIGN KEY (" + columnName + ") REFERENCES " +
+                    referencedTable + "(" + referencedColumn + ") ON DELETE CASCADE";
+
+            // Add this line before jdbcTemplate.execute(sql);
+            System.out.println("Generated SQL Query: " + sql);
+
+            jdbcTemplate.execute(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error adding foreign key constraint", e);
+        }
+    }
 }

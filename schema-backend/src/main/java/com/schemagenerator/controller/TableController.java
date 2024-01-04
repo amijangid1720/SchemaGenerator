@@ -82,6 +82,16 @@ public class TableController {
         }
     }
 
+    @PostMapping("/add-foreign-key")
+    public ResponseEntity<?> addForeignKey(@RequestBody ForeignKeyRequest request) {
+        try {
+            tableService.addForeignKey(request);
+            return ResponseEntity.ok().body("Foreign key added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding foreign key");
+        }
+    }
+
 
 
 

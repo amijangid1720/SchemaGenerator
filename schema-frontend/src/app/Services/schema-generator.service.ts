@@ -17,7 +17,7 @@ export class SchemaGeneratorService {
     return this.http.put(`${environment.backendUrl}schema/update-schema/${tableName}`, { columns });
   }
   generateTable(requestPayload:any):Observable<any>{
-    console.log(requestPayload)
+    //console.log(requestPayload)
    return this.http.post<any>(`${environment.backendUrl}schema/create-table`, requestPayload)
 
   }

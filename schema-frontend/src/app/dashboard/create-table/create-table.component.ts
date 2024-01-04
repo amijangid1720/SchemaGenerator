@@ -88,19 +88,19 @@ export class CreateTableComponent {
       })),
     };
 
-    console.log(requestPayload);
+    //console.log(requestPayload);
     
     this.schemaGenerator.generateTable(requestPayload).subscribe({
       next: (response) => {
-        console.log(response);
+        //console.log(response);
         this.tableService.getTableNames();
 
         this.toaster.showSuccess();
       },
       error: (err) => {
-        console.log('error');
+        //console.log('error');
 
-        console.log(err.message);
+        //console.log(err.message);
         this.toaster.showfailure();
       },
     });
