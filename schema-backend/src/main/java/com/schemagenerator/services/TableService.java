@@ -1,24 +1,21 @@
 package com.schemagenerator.services;
 
+import com.schemagenerator.dao.TableRepo.ColumnDetailsRepo;
+import com.schemagenerator.dao.TableRepo.ConstraintDetailsRepo;
 import com.schemagenerator.dto.*;
+import com.schemagenerator.entity.ColumnDetails;
+import com.schemagenerator.entity.ConstraintDetails;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import com.schemagenerator.entity.Tables;
 import com.schemagenerator.dao.TableRepo.TableRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +36,11 @@ public class TableService {
     @Autowired
     private TableRepository tableRepository;
 
+    @Autowired
+    private ColumnDetailsRepo columnDetailsRepository;
+
+    @Autowired
+    private ConstraintDetailsRepo constraintDetailsRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -80,6 +82,11 @@ public class TableService {
             Tables tableEntity = new Tables();
             tableEntity.setTableName(tableName);
             tableRepository.save(tableEntity);
+            for(Column column : columns){
+                saveColumnInfo(tableName,column.getName(),column.getDataType());
+                saveConstraints(tableName,column.getName(),column.isForeignKey(),column.getReferencedTable(),column.getReferencedColumn(),column.isPrimary());
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error creating table", e);
@@ -215,8 +222,6 @@ public class TableService {
         } catch (Exception s) {
             System.out.println(s.getMessage());
         }
-
-        System.out.println("3");
     }
 
 
@@ -327,5 +332,27 @@ public class TableService {
             e.printStackTrace();
             throw new Exception("Error adding foreign key constraint", e);
         }
+    }
+    public void saveColumnInfo(String tableName, String columnName, String dataType) {
+        ColumnDetails columnInfo = new ColumnDetails();
+        columnInfo.setTableName(tableName);
+        columnInfo.setColumnName(columnName);
+        columnInfo.setDataType(dataType);
+
+        columnDetailsRepository.save(columnInfo);
+    }
+
+    //saveConstraints(tableName,column.getName(),column.isForeignKey(),column.getReferencedTable(),column.getReferencedColumn(),column.isPrimary());
+
+    public void saveConstraints(String tableName, String columnName,Boolean foreignKey,String referencedTable,String referencedColumn,Boolean primary)
+    {
+        ConstraintDetails constraintDetails = new ConstraintDetails();
+        constraintDetails.setTableName(tableName);
+        constraintDetails.setColumnName(columnName);
+        constraintDetails.setForeignKey(foreignKey);
+        constraintDetails.setReferencedTable(referencedTable);
+        constraintDetails.setReferencedColumn(referencedColumn);
+        constraintDetails.setPrimaryKey(primary);
+        constraintDetailsRepository.save(constraintDetails);
     }
 }
