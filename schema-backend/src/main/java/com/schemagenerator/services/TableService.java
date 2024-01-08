@@ -1,14 +1,14 @@
 package com.schemagenerator.services;
 
-import com.schemagenerator.dao.TableRepo.ColumnDetailsRepo;
-import com.schemagenerator.dao.TableRepo.ConstraintDetailsRepo;
+import com.schemagenerator.dao.ColumnDetailsRepo;
+import com.schemagenerator.dao.ConstraintDetailsRepo;
 import com.schemagenerator.dto.*;
 import com.schemagenerator.entity.ColumnDetails;
 import com.schemagenerator.entity.ConstraintDetails;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import com.schemagenerator.entity.Tables;
-import com.schemagenerator.dao.TableRepo.TableRepository;
+import com.schemagenerator.dao.TableRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class TableService {
@@ -45,7 +46,6 @@ public class TableService {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(rollbackOn = Exception.class)
     public void createTable(CreateTableRequest request) throws Exception {
         String tableName = request.getTableName();
         List<Column> columns = request.getColumns();
@@ -84,6 +84,7 @@ public class TableService {
             tableRepository.save(tableEntity);
             for(Column column : columns){
                 saveColumnInfo(tableName,column.getName(),column.getDataType());
+                if(column.isPrimary() || column.isForeignKey())
                 saveConstraints(tableName,column.getName(),column.isForeignKey(),column.getReferencedTable(),column.getReferencedColumn(),column.isPrimary());
             }
 
@@ -92,7 +93,6 @@ public class TableService {
             throw new Exception("Error creating table", e);
         }
     }
-
 
     //to get schema of a particular table
     public TableSchemaResponse getTableSchema(String tableName) {
@@ -150,9 +150,19 @@ public class TableService {
         // Formulate the SQL query to drop the table
         String sql = "DROP TABLE " + tableName;
 
+        // Delete associated column details
+        List<ColumnDetails> columnDetailsList = columnDetailsRepository.findByTableName(tableName);
+        columnDetailsRepository.deleteAll(columnDetailsList);
+
+        // Delete associated constraint details
+        List<ConstraintDetails> constraintDetailsList = constraintDetailsRepository.findByTableName(tableName);
+        constraintDetailsRepository.deleteAll(constraintDetailsList);
+
+
         // Execute the query
         jdbcTemplate.execute(sql);
         tableRepository.delete(table);
+
         // If the execution reaches here, the table was deleted successfully
         return ResponseEntity.status(200).body(new ApiResponse("Table deleted successfully"));
     }
@@ -177,25 +187,33 @@ public class TableService {
                 // If the column name is updated, use the CHANGE COLUMN clause
                 if (!updatedColumn.getName().equals(updatedColumn.getOldName())) {
                     alterColumnName(tableName, updatedColumn.getOldName(), updatedColumn.getName());
+                    updateColumnInfo(tableName, updatedColumn.getOldName(), updatedColumn.getName());
                 }
 
                 // If the data type is updated, use the MODIFY COLUMN clause
                 if (!updatedColumn.getDataType().equals(updatedColumn.getOlddataType())) {
                     alterColumnType(tableName, updatedColumn.getName(), updatedColumn.getDataType());
+                    updateColumnDataType(tableName, updatedColumn.getName(), updatedColumn.getDataType());
                 }
 
                 // If the primary key is updated, handle it accordingly
                 if (updatedColumn.isPrimary() != updatedColumn.isOldIsPrimary()) {
-                    //Drop the tables primary key
+
                     flag = true;
 
                 }
             }
 
             if (flag) {
+
                 dropTablesPrimaryKey(tableName);
+
                 for (Column column : updatedColumns) {
+
                     alterPrimaryKey(tableName, column.getName(), column.isPrimary());
+
+                    alterConstraints(tableName,column.getName());
+
                 }
             }
         } catch (Exception e) {
@@ -231,8 +249,10 @@ public class TableService {
         try {
 
             if (newPrimary) {
+
                 String addPrimaryKeySql = "ALTER TABLE " + tableName + " ADD PRIMARY KEY (" + columnName + ")";
                 jdbcTemplate.execute(addPrimaryKeySql);
+
             }
 
             System.out.println("Operation successful");
@@ -287,12 +307,14 @@ public class TableService {
             namedParameterJdbcTemplate.update(sql.toString(), parameterSource);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception("Error adding data to table", e);
+            throw new Exception("Error adding data to table");
         }
     }
 
 
     private Object convertToDataType(Object value) {
+        if(value==null)
+            return null;
         if (value instanceof String) {
             return value;
         } else if (value instanceof Integer) {
@@ -328,6 +350,8 @@ public class TableService {
             System.out.println("Generated SQL Query: " + sql);
 
             jdbcTemplate.execute(sql);
+            saveConstraints(tableName, columnName, true, referencedTable, referencedColumn, false);
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error adding foreign key constraint", e);
@@ -355,4 +379,42 @@ public class TableService {
         constraintDetails.setPrimaryKey(primary);
         constraintDetailsRepository.save(constraintDetails);
     }
+
+    private void updateColumnInfo(String tableName, String oldColumnName, String newColumnName) {
+        // Update ColumnDetails entity
+        Optional<ColumnDetails> columnDetailsOptional = columnDetailsRepository.findByTableNameAndColumnName(tableName, oldColumnName);
+        if (columnDetailsOptional.isPresent()) {
+            ColumnDetails columnInfo = columnDetailsOptional.get();
+            columnInfo.setColumnName(newColumnName);
+            columnDetailsRepository.save(columnInfo);
+        }
+    }
+
+    private void updateColumnDataType(String tableName, String columnName, String newColumnType) {
+        // Update ColumnDetails entity
+        Optional<ColumnDetails> columnDetailsOptional = columnDetailsRepository.findByTableNameAndColumnName(tableName, columnName);
+        if (columnDetailsOptional.isPresent()) {
+            ColumnDetails columnInfo = columnDetailsOptional.get();
+            columnInfo.setDataType(newColumnType);
+            System.out.println(columnInfo);
+            columnDetailsRepository.save(columnInfo);
+        }
+    }
+    private void alterConstraints(String tableName,String columnName){
+        Optional<ConstraintDetails> columnConstraintOptional = constraintDetailsRepository.findByTableNameAndPrimaryKey(tableName,true);
+        constraintDetailsRepository.delete(columnConstraintOptional.get());
+        constraintDetailsRepository.save(new ConstraintDetails(tableName,columnName,false,true));
+    }
+//    private void deleteColumns(String tableName){
+//        System.out.println("0");
+//        Optional<ColumnDetails> columnDetails =columnDetailsRepository.findByTableName(tableName);
+//        System.out.println(columnDetails);
+//        columnDetailsRepository.delete(columnDetails.get());
+//        System.out.println("2");
+//        Optional<ConstraintDetails> constraintDetails=constraintDetailsRepository.findByTableName(tableName);
+//        constraintDetailsRepository.delete(constraintDetails.get());
+//        System.out.println("3");
+//    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.schemagenerator.dao.TableRepo;
+package com.schemagenerator.dao;
 
 import com.schemagenerator.entity.Tables;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -41,8 +41,8 @@ export class TableComponent {
       .subscribe({
         next: (response: any) => {
           //console.log(response);
-
           this.column = response.columns;
+          //this.column=this.column.filter(column => !column.primary);
           //console.log(this.column);
 
           this.columnNames = this.column.map((column: any) => column.name);

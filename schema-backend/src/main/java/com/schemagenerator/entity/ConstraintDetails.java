@@ -23,4 +23,11 @@ public class ConstraintDetails {
     private String referencedTable;
     private String referencedColumn;
     private boolean primaryKey;
+
+    public ConstraintDetails(String tableName, String columnName, boolean foreignKey, boolean primaryKey) {
+        this.tableName = tableName;
+        this.columnName = columnName;
+        this.foreignKey = foreignKey;
+        this.primaryKey = primaryKey;
+    }
 }

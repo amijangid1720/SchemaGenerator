@@ -79,7 +79,7 @@
             aria-label="Sizing example input remove-outline"
             placeholder="Enter Column Name"
             aria-describedby="inputGroup-sizing-lg"
-            [(ngModel)]="column.name"
+            [(ngModel)]="column.name" 
             name="columnName{{ index }}"
             pattern="^[^\s]+$"
             #columnNameInput="ngModel"
@@ -203,6 +203,7 @@
               class="btn btn-dark"
               (click)="column.foreignKey=!column.foreignKey"
               [(ngModel)]="column.foreignKey"
+              ngDefaultControl
             >
               Add Foreign Key
             </button>

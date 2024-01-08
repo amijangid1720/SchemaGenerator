@@ -6,6 +6,6 @@ export class Column {
   primary: boolean = false;
   oldPrimary: boolean = false;
   foreignKey: boolean = false;
-  referencedTable: '';
-  referencedColumn: '';
+  referencedTable:string='';
+  referencedColumn:string= '';
 }
