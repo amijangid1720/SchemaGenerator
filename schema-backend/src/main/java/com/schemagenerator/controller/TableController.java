@@ -27,7 +27,7 @@ public class TableController {
         try {
             System.out.println(request);
             tableService.createTable(request);
-            return ResponseEntity.ok().body(new ApiResponse("Table created sucecssfully"));
+            return ResponseEntity.ok().body(new ApiResponse("Table created successfully"));
         } catch (Exception e) {
 //             return ResponseEntity.ok().body("table not created");
             return ResponseEntity.status(500).body(new ApiResponse("Failed to create table"));
@@ -79,6 +79,16 @@ public class TableController {
             return ResponseEntity.ok().body(new ApiResponse("Table schema updated successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse("Failed to update table schema"));
+        }
+    }
+
+    @PostMapping("/add-foreign-key")
+    public ResponseEntity<?> addForeignKey(@RequestBody ForeignKeyRequest request) {
+        try {
+            tableService.addForeignKey(request);
+            return ResponseEntity.ok().body("Foreign key added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding foreign key");
         }
     }
 

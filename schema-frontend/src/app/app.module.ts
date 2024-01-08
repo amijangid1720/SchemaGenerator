@@ -18,6 +18,8 @@ import { TableComponent } from './table/table.component';
 import { TableDescriptionComponent } from './table-description/table-description.component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConstraintsComponent } from './constraints/constraints.component';
+
 
 
 
@@ -28,7 +30,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     CreateTableComponent,
     SideMenuComponent,
     TableComponent,
-    TableDescriptionComponent
+    TableDescriptionComponent,
+    ConstraintsComponent
   ],
   imports: [
     BrowserModule,

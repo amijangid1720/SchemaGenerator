@@ -4,6 +4,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CreateTableComponent } from './dashboard/create-table/create-table.component';
 import { TableComponent } from './table/table.component';
 import { TableDescriptionComponent } from './table-description/table-description.component';
+import { ConstraintsComponent } from './constraints/constraints.component';
 
 const routes: Routes = [
   {
@@ -15,12 +16,16 @@ const routes: Routes = [
       component:CreateTableComponent,
     },
     {
-      path: 'table/:tableName', // Add a dynamic parameter :tableName
+      path: 'table/:tableName', 
       component: TableComponent,
     },
     {
       path:'tabledesc/:tableName',
       component:TableDescriptionComponent,
+    },
+    {
+      path:'addForeignKey/:tableName',
+      component:ConstraintsComponent
     }
 
    

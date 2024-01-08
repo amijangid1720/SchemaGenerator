@@ -1,0 +1,27 @@
+<div class="add-foreign-key table-responsive{-sm|-md|-lg|-xl|-xxl} wrapper text-center">
+    <h2>Add Foreign Key</h2>
+  
+    <form>
+        <div class="form-group">
+            <label for="columnName">Column Name:</label>
+            <!-- Update the input field to a dropdown -->
+            <select id="columnName" name="columnName" [(ngModel)]="selectedColumn" required>
+              <option value="" disabled>Select Column</option>
+              <option *ngFor="let column of columnNames" [value]="column">{{ column }}</option>
+            </select>
+          </div>
+  
+      <div class="form-group">
+        <label for="referencedTable">Referenced Table:</label>
+        <input type="text" id="referencedTable" name="referencedTable" [(ngModel)]="referencedTable" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="referencedColumn">Referenced Column:</label>
+        <input type="text" id="referencedColumn" name="referencedColumn" [(ngModel)]="referencedColumn" required>
+      </div>
+  
+      <button type="submit" class="btn btn-dark"(click)="addKey()">Add Foreign Key</button>
+    </form>
+  </div>
+  

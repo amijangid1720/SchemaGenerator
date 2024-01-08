@@ -8,16 +8,15 @@ import { ToasterService } from '../Services/toaster.service';
 @Component({
   selector: 'app-table-description',
   templateUrl: './table-description.component.html',
-  styleUrls: ['./table-description.component.css']
+  styleUrls: ['./table-description.component.css'],
 })
 export class TableDescriptionComponent {
-  tablename:string='';
-  column:any[]=[];
+  tablename: string = '';
+  column: any[] = [];
   primaryKeyVisibility: boolean = true;
   selectedPrimaryIndex: number | null = null;
   selectedDataType: string = '';
-  oldCol:any[]=[];
-  
+  oldCol: any[] = [];
 
   constructor(
     private schemaGenerator: SchemaGeneratorService,
@@ -57,26 +56,30 @@ export class TableDescriptionComponent {
 
   uneditable(event: Event, index: number) {
     event.preventDefault();
-    console.log('Primary key clicked:', index);
+    //console.log('Primary key clicked:', index);
     // Your existing logic for updating primary keys can go here
   }
-  
 
   saveTable(): void {
     // Assuming you have a service method named updateTableSchema in SchemaGeneratorService
-    this.schemaGenerator.updateTableSchema(this.tablename, this.column)
+    this.schemaGenerator
+      .updateTableSchema(this.tablename, this.column)
       .subscribe({
         next: (response) => {
-          console.log(response);
+          //console.log(response);
           this.toaster.showSuccess('Updated scuccessfully', 'Saved');
           // Handle the response, show success message, etc.
+          this.column.forEach((col) => {
+            col.editing = false;
+            // Revert changes by restoring the values from the backup
+          });
         },
         error: (error) => {
           console.error(error);
           this.toaster.showError('Failed to Update Schema','Failed');
           
           // Handle the error, show error message, etc.
-        }
+        },
       });
   }
 
@@ -89,30 +92,32 @@ export class TableDescriptionComponent {
       col.dataType = col.olddataType;
       col.primary = col.oldIsPrimary;
     });
-  
-    
   }
 
-OnSelectedDataType(event:any, columnIndex:number, column:Column){
-  console.log(event);
-  console.log(columnIndex);
-  console.log(column);
-  column.dataType=event.target.name;
-  console.log(column.dataType);
-  
-}
+  OnSelectedDataType(event: any, columnIndex: number, column: Column) {
+    //console.log(event);
+    //console.log(columnIndex);
+    //console.log(column);
+    column.dataType = event.target.name;
+    //console.log(column.dataType);
+  }
 
-toggleEditMode(): void {
-  this.column.forEach((col) => {
-    col.editing = true;
-    col.oldName = col.name;
-    col.olddataType = col.dataType;
-    col.oldIsPrimary = col.primary;
-  });
-  this.oldCol = this.column.map((col) => ({ ...col }));
-}
-hasPrimaryKey(column: any): boolean {
-  return this.column.some((col) => col.primary && col !== column);
-}
-}
+  toggleEditMode(): void {
+    this.column.forEach((col) => {
+      col.editing = true;
+      col.oldName = col.name;
+      col.olddataType = col.dataType;
+      col.oldIsPrimary = col.primary;
+    });
+    this.oldCol = this.column.map((col) => ({ ...col }));
+  }
+  hasPrimaryKey(column: any): boolean {
+    return this.column.some((col) => col.primary && col !== column);
+  }
 
+  getToolTip(column : Column) {
+    //console.log(column);
+    
+    return column.referencedTable +"("+column.referencedColumn+")";
+  }
+}

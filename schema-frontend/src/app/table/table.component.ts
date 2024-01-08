@@ -4,61 +4,58 @@ import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
 import { TableRow } from '../Models/table-row';
 import { TableService } from '../Services/table.service';
-import { FormsModule } from '@angular/forms'; 
+import { FormsModule } from '@angular/forms';
 import { ParseError } from '@angular/compiler';
 import { ToasterService } from '../Services/toaster.service';
-
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css']
+  styleUrls: ['./table.component.css'],
 })
-
-
 export class TableComponent {
- 
-column: any[] = [];
+  column: any[] = [];
   cnames: string[] = [];
   columnNames: string[] = [];
-  tableName:any;
-  newRow: any = {}; 
+  tableName: any;
+  newRow: any = {};
   columnData: any[] = []; // Initialize as an empty array
-  // newRow: any = {};
-  // columnDatas: TableRow[] = [{}];
   
+
   constructor(
     private schemaGenerator: SchemaGeneratorService,
     private route: ActivatedRoute,
     private tableService: TableService,
-    private toaster: ToasterService,
+    private toaster: ToasterService
   ) {}
 
-      // Subscribe to route parameter changes
-      ngOnInit() {
-      this.route.paramMap.pipe(
-        switchMap(params => {
-         this.tableName = params.get('tableName');
+  // Subscribe to route parameter changes
+  ngOnInit() {
+    this.route.paramMap
+      .pipe(
+        switchMap((params) => {
+          this.tableName = params.get('tableName');
           return this.schemaGenerator.fetchSchema(this.tableName);
         })
-      ).subscribe({
+      )
+      .subscribe({
         next: (response: any) => {
-          console.log(response);
-  
+          //console.log(response);
+
           this.column = response.columns;
-          console.log(this.column);
-  
+          //console.log(this.column);
+
           this.columnNames = this.column.map((column: any) => column.name);
-  
+
           // Fetch and display data from the backend
           this.tableService.fetchTableData(this.tableName).subscribe({
             next: (data: any[]) => {
-              console.log(data);
+              //console.log(data);
               this.columnData = data;
             },
             error: (error) => {
               console.error('Error fetching table data', error);
-            }
+            },
           });
         },
         error: (err) => {
@@ -139,9 +136,8 @@ column: any[] = [];
           return parseFloat(value);
        case 'real':
         return parseFloat(value);
-        default:
-          return value;
-      }
+      default:
+        return value;
     }
   }
-
+}

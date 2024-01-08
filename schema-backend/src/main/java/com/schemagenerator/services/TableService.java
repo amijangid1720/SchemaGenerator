@@ -1,8 +1,11 @@
 package com.schemagenerator.services;
 
+import com.schemagenerator.dao.TableRepo.ColumnDetailsRepo;
+import com.schemagenerator.dao.TableRepo.ConstraintDetailsRepo;
 import com.schemagenerator.dto.*;
+import com.schemagenerator.entity.ColumnDetails;
+import com.schemagenerator.entity.ConstraintDetails;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import com.schemagenerator.entity.Tables;
 import com.schemagenerator.dao.TableRepo.TableRepository;
@@ -10,19 +13,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class TableService {
-
 
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -31,12 +29,18 @@ public class TableService {
     public TableService(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private TableRepository tableRepository;
 
+    @Autowired
+    private ColumnDetailsRepo columnDetailsRepository;
+
+    @Autowired
+    private ConstraintDetailsRepo constraintDetailsRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -53,9 +57,16 @@ public class TableService {
 
             if (column.isPrimary()) {
                 sql.append(" PRIMARY KEY");
-            }
 
+            } else if (column.isForeignKey()) {
+                sql.append(", CONSTRAINT fk_" + tableName + "_" + column.getName() +
+                        " FOREIGN KEY (" + column.getName() + ") REFERENCES " +
+                        column.getReferencedTable() + "(" + column.getReferencedColumn() + ") " +
+                        "ON DELETE CASCADE");
+
+            }
             sql.append(", ");
+
         }
 
         // Remove the trailing comma and space
@@ -71,6 +82,11 @@ public class TableService {
             Tables tableEntity = new Tables();
             tableEntity.setTableName(tableName);
             tableRepository.save(tableEntity);
+            for(Column column : columns){
+                saveColumnInfo(tableName,column.getName(),column.getDataType());
+                saveConstraints(tableName,column.getName(),column.isForeignKey(),column.getReferencedTable(),column.getReferencedColumn(),column.isPrimary());
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error creating table", e);
@@ -90,7 +106,14 @@ public class TableService {
                 "   JOIN information_schema.table_constraints tc " +
                 "     ON kcu.constraint_name = tc.constraint_name " +
                 "   WHERE tc.table_name = :tableName AND tc.constraint_type = 'PRIMARY KEY' " +
-                ") THEN true ELSE false END as isPrimary " +
+                ") THEN true ELSE false END as isPrimary, " +
+                "CASE WHEN column_name = ANY (" +
+                "   SELECT kcu.column_name " +
+                "   FROM information_schema.key_column_usage kcu " +
+                "   JOIN information_schema.table_constraints tc " +
+                "     ON kcu.constraint_name = tc.constraint_name " +
+                "   WHERE tc.table_name = :tableName AND tc.constraint_type = 'FOREIGN KEY' " +
+                ") THEN true ELSE false END as isForeignKey " +
                 "FROM information_schema.columns " +
                 "WHERE table_name = :tableName";
 
@@ -106,7 +129,7 @@ public class TableService {
         //convert result to List<Column>
 
         List<Column> columns = result.stream()
-                .map(row -> new Column((String) row[0], null, (boolean) row[2], false, (String) row[1], null))
+                .map(row -> new Column((String) row[0], null, (boolean) row[2], false, (String) row[1], null,(Boolean) row[3],null,null))
                 .toList();
 
 
@@ -148,7 +171,7 @@ public class TableService {
 
     @Transactional(rollbackOn = Exception.class)
     public void updateTableSchema(String tableName, List<Column> updatedColumns) throws Exception {
-        boolean flag=false;
+        boolean flag = false;
         try {
             for (Column updatedColumn : updatedColumns) {
                 // If the column name is updated, use the CHANGE COLUMN clause
@@ -164,17 +187,15 @@ public class TableService {
                 // If the primary key is updated, handle it accordingly
                 if (updatedColumn.isPrimary() != updatedColumn.isOldIsPrimary()) {
                     //Drop the tables primary key
-                    flag=true;
+                    flag = true;
 
                 }
             }
 
-            if(flag)
-            {
+            if (flag) {
                 dropTablesPrimaryKey(tableName);
-                for(Column column : updatedColumns)
-                {
-                    alterPrimaryKey(tableName,column.getName(),column.isPrimary());
+                for (Column column : updatedColumns) {
+                    alterPrimaryKey(tableName, column.getName(), column.isPrimary());
                 }
             }
         } catch (Exception e) {
@@ -201,8 +222,6 @@ public class TableService {
         } catch (Exception s) {
             System.out.println(s.getMessage());
         }
-
-        System.out.println("3");
     }
 
 
@@ -222,7 +241,7 @@ public class TableService {
         }
     }
 
-    public void dropTablesPrimaryKey( String tableName){
+    public void dropTablesPrimaryKey(String tableName) {
         String constraintQuery = "SELECT constraint_name " +
                 "FROM information_schema.table_constraints " +
                 "WHERE table_name = '" + tableName.toLowerCase() + "' AND constraint_type = 'PRIMARY KEY'";
@@ -290,5 +309,50 @@ public class TableService {
             // Handle other data types as needed
             return value.toString(); // Default to String if the type is not recognized
         }
+    }
+
+    public void addForeignKey(ForeignKeyRequest request) throws Exception {
+        String tableName = request.getTableName();
+        String columnName = request.getColumnName();
+        String referencedTable = request.getReferencedTable();
+        String referencedColumn = request.getReferencedColumn();
+
+        try {
+            // Generate SQL statement for adding a foreign key constraint
+            String sql = "ALTER TABLE " + tableName +
+                    " ADD CONSTRAINT fk_" + tableName + "_" + columnName +
+                    " FOREIGN KEY (" + columnName + ") REFERENCES " +
+                    referencedTable + "(" + referencedColumn + ") ON DELETE CASCADE";
+
+            // Add this line before jdbcTemplate.execute(sql);
+            System.out.println("Generated SQL Query: " + sql);
+
+            jdbcTemplate.execute(sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error adding foreign key constraint", e);
+        }
+    }
+    public void saveColumnInfo(String tableName, String columnName, String dataType) {
+        ColumnDetails columnInfo = new ColumnDetails();
+        columnInfo.setTableName(tableName);
+        columnInfo.setColumnName(columnName);
+        columnInfo.setDataType(dataType);
+
+        columnDetailsRepository.save(columnInfo);
+    }
+
+    //saveConstraints(tableName,column.getName(),column.isForeignKey(),column.getReferencedTable(),column.getReferencedColumn(),column.isPrimary());
+
+    public void saveConstraints(String tableName, String columnName,Boolean foreignKey,String referencedTable,String referencedColumn,Boolean primary)
+    {
+        ConstraintDetails constraintDetails = new ConstraintDetails();
+        constraintDetails.setTableName(tableName);
+        constraintDetails.setColumnName(columnName);
+        constraintDetails.setForeignKey(foreignKey);
+        constraintDetails.setReferencedTable(referencedTable);
+        constraintDetails.setReferencedColumn(referencedColumn);
+        constraintDetails.setPrimaryKey(primary);
+        constraintDetailsRepository.save(constraintDetails);
     }
 }

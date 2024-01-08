@@ -39,4 +39,8 @@ export class TableService {
     const url =`${environment.backendUrl}schema/addRow/${tableName}`;
     return this.http.post<any>(url,newRow);
   }
+
+  addForeignKey(request: any): Observable<any> {
+    return this.http.post(`${environment.backendUrl}schema/add-foreign-key`, request);
+  }
 }
